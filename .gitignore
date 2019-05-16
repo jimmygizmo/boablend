@@ -1,0 +1,22 @@
+# .gitignore
+
+# Python virtual environment directory
+.venv
+
+# Python cache
+__pycache__
+
+# Python compiled bytecode files from imported modules
+*.pyc
+
+# MacOS Finder custom attributes file
+.DS_Store
+
+# Blender files
+*.blend
+*.blend[1-9]
+
+
+##
+#
+

@@ -1,0 +1,13 @@
+###############################################################################
+# Project-specific Python dependencies
+
+# This requirements.txt file should be located in the root directory of this
+# project/repository.
+
+# Currently there are no project-specific Python dependencies in use.
+# This is a Blender project and at this initial stage, only Blender's
+# built-in Python environment will be used.
+
+
+##
+#

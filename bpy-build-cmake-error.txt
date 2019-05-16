@@ -1,0 +1,51 @@
+
+(.venv) ➜  boablend git:(master) ✗ python3 -m pip install bpy --no-binary :all:
+Collecting bpy
+  Using cached https://files.pythonhosted.org/packages/18/40/f8166da0a9c7f33bd0a942e9b86e83bd9ab07d85aabff6ffb7e0b939c3cf/bpy-1.2.3.tar.gz
+Installing collected packages: bpy
+  Running setup.py install for bpy ... error
+    ERROR: Complete output from command /Users/bilbo/GITREPOS/boablend/.venv/bin/python3 -u -c 'import setuptools, tokenize;__file__='"'"'/private/var/folders/q1/zv1y6l4s7_x28jqcdvpp37mh0000gn/T/pip-install-vgmg3dj_/bpy/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' install --record /private/var/folders/q1/zv1y6l4s7_x28jqcdvpp37mh0000gn/T/pip-record-kf20k7u9/install-record.txt --single-version-externally-managed --compile --install-headers /Users/bilbo/GITREPOS/boablend/.venv/include/site/python3.7/bpy:
+    ERROR: running install
+    running build
+    running build_ext
+    Preparing the build environment
+    Cloning Blender source from git://git.blender.org/blender.git
+    Updating Blender git submodules
+    Configuring cmake project
+    cmake -H/Users/bilbo/.blenderpy/blender -Bbuild/temp.macosx-10.14-x86_64-3.7 -DWITH_PLAYER=OFF -DWITH_PYTHON_INSTALL=OFF -DWITH_PYTHON_MODULE=ON
+    -- The C compiler identification is AppleClang 10.0.1.10010046
+    -- The CXX compiler identification is AppleClang 10.0.1.10010046
+    -- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
+    -- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc -- works
+    -- Detecting C compiler ABI info
+    -- Detecting C compiler ABI info - done
+    -- Detecting C compile features
+    -- Detecting C compile features - done
+    -- Check for working CXX compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
+    -- Check for working CXX compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ -- works
+    -- Detecting CXX compiler ABI info
+    -- Detecting CXX compiler ABI info - done
+    -- Detecting CXX compile features
+    -- Detecting CXX compile features - done
+    -- Detected OS X 10.14 and Xcode 10. at /Applications/Xcode.app
+    -- OSX_SYSROOT_PREFIX: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform
+    -- WITH_DRACO requires WITH_PYTHON_INSTALL to be ON, disabling WITH_DRACO for now
+    -- Performing Test SUPPORT_SSE_BUILD
+    -- Performing Test SUPPORT_SSE_BUILD - Success
+    -- SSE Support: detected.
+    -- Performing Test SUPPORT_SSE2_BUILD
+    -- Performing Test SUPPORT_SSE2_BUILD - Success
+    -- SSE2 Support: detected.
+    -- Found Git: /usr/bin/git (found version "2.20.1 (Apple Git-117)")
+    CMake Error at build_files/cmake/platform/platform_apple.cmake:38 (message):
+      Mac OSX requires pre-compiled libs at:
+      '/Users/bilbo/.blenderpy/blender/../lib/darwin'
+    Call Stack (most recent call first):
+      CMakeLists.txt:900 (include)
+
+
+    -- Configuring incomplete, errors occurred!
+    See also "/private/var/folders/q1/zv1y6l4s7_x28jqcdvpp37mh0000gn/T/pip-install-vgmg3dj_/bpy/build/temp.macosx-10.14-x86_64-3.7/CMakeFiles/CMakeOutput.log".
+    error: command 'cmake' failed with exit status 1
+    ----------------------------------------
+ERROR: Command "/Users/bilbo/GITREPOS/boablend/.venv/bin/python3 -u -c 'import setuptools, tokenize;__file__='"'"'/private/var/folders/q1/zv1y6l4s7_x28jqcdvpp37mh0000gn/T/pip-install-vgmg3dj_/bpy/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' install --record /private/var/folders/q1/zv1y6l4s7_x28jqcdvpp37mh0000gn/T/pip-record-kf20k7u9/install-record.txt --single-version-externally-managed --compile --install-headers /Users/bilbo/GITREPOS/boablend/.venv/include/site/python3.7/bpy" failed with error code 1 in /private/var/folders/q1/zv1y6l4s7_x28jqcdvpp37mh0000gn/T/pip-install-vgmg3dj_/bpy/
