@@ -10,7 +10,7 @@
 # This does not prevent the use of boablend within Blender, but it would be nice to fix
 # for a more complete and full-featured project.
 
-import bpy
+#import bpy  #Bpy install compile fails. This does not affect executing within Blender.
 import sys
 
 
@@ -26,7 +26,7 @@ EUL_TO_DEG_FACTOR = (180.0/PI) # 57.29577957855229
 
 
 class Camera:
-    def __init__(self, cam):
+    def __init__(self, bpy, cam):
         if not cam:
             cam = {
                 'scene.camera.location.x': 67.37174224853516,
@@ -42,6 +42,7 @@ class Camera:
                 'render_resolution_y': 480,
                 'scene.camera.data.angle': 88.22523942116491
             }
+        self.cam = cam
 # Attribute/key names in the cam dictionary are identical to Blender internal
 # references to the same data, except for the following which were given symbols
 # for brevity and clarity.
@@ -50,25 +51,25 @@ class Camera:
 # 'rot_eul2z_deg' is the symbol for 'scene.camera.rotation_euler[2] in degrees'  # Z
 
 
-    def setup_camera(cam):
+    def setup_camera(self, bpy):
         scene = bpy.data.scenes["Scene"]
 
         # Camera Location
-        scene.camera.location.x = cam['scene.camera.location.x']
-        scene.camera.location.y = cam['scene.camera.location.y']
-        scene.camera.location.z = cam['scene.camera.location.z']
+        scene.camera.location.x = self.cam['scene.camera.location.x']
+        scene.camera.location.y = self.cam['scene.camera.location.y']
+        scene.camera.location.z = self.cam['scene.camera.location.z']
 
         # Camera Rotation - Degrees - Rotation Mode: 'XYZ Euler'/'XYZ'
         scene.camera.rotation_mode = 'XYZ'
-        scene.camera.rotation_euler[0] = cam['rot_eul0x_deg']*DEG_TO_EUL_FACTOR
-        scene.camera.rotation_euler[1] = cam['rot_eul1y_deg']*DEG_TO_EUL_FACTOR
-        scene.camera.rotation_euler[2] = cam['rot_eul2z_deg']*DEG_TO_EUL_FACTOR
+        scene.camera.rotation_euler[0] = self.cam['rot_eul0x_deg']*DEG_TO_EUL_FACTOR
+        scene.camera.rotation_euler[1] = self.cam['rot_eul1y_deg']*DEG_TO_EUL_FACTOR
+        scene.camera.rotation_euler[2] = self.cam['rot_eul2z_deg']*DEG_TO_EUL_FACTOR
 
         # Camera FOV - Degrees
-        scene.camera.data.angle = cam['scene.camera.data.angle']*DEG_TO_EUL_FACTOR
+        scene.camera.data.angle = self.cam['scene.camera.data.angle']*DEG_TO_EUL_FACTOR
 
-        scene.render.resolution_x = cam['render_resolution_x']
-        scene.render.resolution_y = cam['render_resolution_y']
+        scene.render.resolution_x = self.cam['render_resolution_x']
+        scene.render.resolution_y = self.cam['render_resolution_y']
 
         # Camera Scale [UNUSED/UNTESTED]
         # Try this out. We can read the data via: bpy.data.objects['Camera'].scale.x etc.
@@ -77,9 +78,9 @@ class Camera:
         # And scene = bpy.data.scenes["Scene"] .. SO:
         # bpy.data.objects['Camera'] = bpy.data.scenes["Scene"].camera
         #
-        # scene.camera.scale.x = cam['scene.camera.scale.x']
-        # scene.camera.scale.y = cam['scene.camera.scale.y']
-        # scene.camera.scale.z = cam['scene.camera.scale.z']
+        # scene.camera.scale.x = self.cam['scene.camera.scale.x']
+        # scene.camera.scale.y = self.cam['scene.camera.scale.y']
+        # scene.camera.scale.z = self.dcam['scene.camera.scale.z']
 
 
 ########################################## MAIN EXECUTION ##########################################
