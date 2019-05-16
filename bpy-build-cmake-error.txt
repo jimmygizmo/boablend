@@ -49,3 +49,6 @@ Installing collected packages: bpy
     error: command 'cmake' failed with exit status 1
     ----------------------------------------
 ERROR: Command "/Users/bilbo/GITREPOS/boablend/.venv/bin/python3 -u -c 'import setuptools, tokenize;__file__='"'"'/private/var/folders/q1/zv1y6l4s7_x28jqcdvpp37mh0000gn/T/pip-install-vgmg3dj_/bpy/setup.py'"'"';f=getattr(tokenize, '"'"'open'"'"', open)(__file__);code=f.read().replace('"'"'\r\n'"'"', '"'"'\n'"'"');f.close();exec(compile(code, __file__, '"'"'exec'"'"'))' install --record /private/var/folders/q1/zv1y6l4s7_x28jqcdvpp37mh0000gn/T/pip-record-kf20k7u9/install-record.txt --single-version-externally-managed --compile --install-headers /Users/bilbo/GITREPOS/boablend/.venv/include/site/python3.7/bpy" failed with error code 1 in /private/var/folders/q1/zv1y6l4s7_x28jqcdvpp37mh0000gn/T/pip-install-vgmg3dj_/bpy/
+
+##
+#
