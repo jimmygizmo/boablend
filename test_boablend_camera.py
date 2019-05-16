@@ -1,10 +1,27 @@
 
-
 # This 'import bpy' will show as broken in the IDE if bpy is not installed in the
 # external environment, however since this script is invoked via exec() from within
 # the Blender internal Python environment, it will be imported successfully there.
 import bpy
-from boablend import Camera
+
+################################### FIX ATTEMPT
+# FROM:
+# https://blender.stackexchange.com/questions/33603/importing-python-modules-and-text-files
+
+import sys
+import os
+
+dir = os.path.dirname(bpy.data.filepath)
+if not dir in sys.path:
+    sys.path.append(dir)
+
+import boablend
+
+import imp
+imp.reload(boablend)
+################################### END FIX ATTEMPT
+
+
 
 main_camera_settings = {
     'scene.camera.location.x': 67.37174224853516,
@@ -22,7 +39,7 @@ main_camera_settings = {
 }
 
 # New instance of boablend.Camera with the specified settings
-main_camera = Camera(bpy, main_camera_settings)
+main_camera = boablend.Camera(bpy, main_camera_settings)
 
 main_camera.setup_camera(bpy)  # Apply the settings to the current Blend file
 
