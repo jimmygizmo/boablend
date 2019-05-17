@@ -13,8 +13,8 @@ if not dir in sys.path:
 
 import boablend
 
-import imp
-imp.reload(boablend)
+import importlib
+importlib.reload(boablend)
 
 
 main_camera_settings = {

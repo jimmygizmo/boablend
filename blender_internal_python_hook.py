@@ -1,7 +1,7 @@
 
 ###############################################################################
 ################################ BOABLEND HOOK ################################
-# boablend_hook_version = '2019-002'
+# boablend_hook_version = '2019-003'
 ###############################################################################
 # Install all of the code in this file into a Text Object within Blender.
 # It is recommended to name this Text Object 'boablend_hook'.
@@ -29,7 +29,7 @@ verbose = True
 
 # The following path must be expressed:
 # RELATIVE TO THE CURRENT BLEND FILE CONTAINING THIS HOOK CODE.
-boablend_entry_point = 'test_boablend_camera.py'
+boablend_entry_point = 'boablend_start.py'
 
 ###############################################################################
 
