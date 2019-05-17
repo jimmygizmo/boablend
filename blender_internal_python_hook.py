@@ -1,7 +1,7 @@
 
 ###############################################################################
 ################################ BOABLEND HOOK ################################
-# boablend_hook_version = '2019-001'
+# boablend_hook_version = '2019-002'
 ###############################################################################
 # Install all of the code in this file into a Text Object within Blender.
 # It is recommended to name this Text Object 'boablend_hook'.
