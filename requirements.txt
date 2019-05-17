@@ -4,9 +4,14 @@
 # This requirements.txt file should be located in the root directory of this
 # project/repository.
 
-# Currently there are no project-specific Python dependencies in use.
-# This is a Blender project and at this initial stage, only Blender's
-# built-in Python environment will be used.
+# There are two reasons why this requirements.txt file is currently
+# empty:
+
+# 1. Currently there are no project-specific Python dependencies in use.
+# 2. This is a Blender project and at this initial stage, only Blender's
+# built-in Python environment will be used. Using this requirements.txt to
+# install project dependencies with pip will only become necessary file once
+# this project executes externally from the BLender application.
 
 
 ##

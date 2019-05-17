@@ -13,8 +13,8 @@ __pycache__
 .DS_Store
 
 # Blender files
-*.blend
-*.blend[1-9]
+#*.blend
+#*.blend[1-9]
 
 
 ##
