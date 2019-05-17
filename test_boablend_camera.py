@@ -4,10 +4,6 @@
 # the Blender internal Python environment, it will be imported successfully there.
 import bpy
 
-################################### FIX ATTEMPT
-# FROM:
-# https://blender.stackexchange.com/questions/33603/importing-python-modules-and-text-files
-
 import sys
 import os
 
@@ -19,8 +15,6 @@ import boablend
 
 import imp
 imp.reload(boablend)
-################################### END FIX ATTEMPT
-
 
 
 main_camera_settings = {

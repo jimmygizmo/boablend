@@ -47,13 +47,16 @@ boablend_entry_point = 'test_boablend_camera.py'
 # ever needed to the hook code or if it is updated along with this project,
 # you will need to manually (cut/paste) the updated hook code.
 
+
+if verbose:
+    print()
+    print("~~~~~~~~~~~~~~~~~~~~ Boablend starting.")
+
 current_working_directory = os.getcwd()
 
 if verbose:
     print("Blender file current working directory: ")
     print(current_working_directory)
-
-if verbose:
     print("Boablend entry point filename: {}".\
         format(boablend_entry_point))
 
