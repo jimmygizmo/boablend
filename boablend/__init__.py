@@ -1,19 +1,21 @@
 #! /usr/bin/env python3
-# This module code is not meant to be executed, but the shebang is here in case an
-# attempt is made. At the end of this file, a __main__ block will issue an informative
-# warning if direct execution occurs for whatever reason.
+####################################################################################################
+# This module code is not meant to be executed, but the shebang is here to support issuing a warning
+# through the __main__ block at the end of the file if direct execution is attempted.
 
-# The import of bpy works within Blender. However, extra steps are needed in order to
-# make it work for external execution as well as to make it recognized by the IDE
-# as a valid import. To install bpy requires compilation it and this is currently
-# failing. When the bpy build and python module install is working, then we
-# can make 'import bpy' work for external execution and for the VSCode/IDE code
-# inspection features. See the build error log in this repo and comments in init.sh
-# for more information on the bpy build failure.
-# This does not prevent the use of boablend within Blender, but it would be nice to fix
-# for a more complete and full-featured project.
+####################################################################################################
+#import bpy  # This import is not needed under the current execution model and it will not currently
+# work because we do not yet have an external bpy build in the boablend environment.
+#
+# The import of bpy of course DOES work within Blender and when execution begins within the boablend
+# Blender hook code. However, extra steps are needed in order to make it work for external execution
+# as well as to make it recognized by the IDE as a valid import. To install bpy requires compilation
+# and this is currently failing. When the bpy build and python module install is working, then we
+# can make 'import bpy' work for external execution and for the VSCode/IDE code inspection features.
+# See the build error log in this repo and comments in init.sh for more information on the bpy build
+# failure. This does not prevent the use of boablend within Blender, but it would be nice to fix for
+# a more complete and full-featured project.
 
-#import bpy  #Bpy install compile fails. This does not affect executing within Blender.
 import sys
 
 
@@ -46,9 +48,8 @@ class Camera:
                 'scene.camera.data.angle': 88.22523942116491
             }
         self.cam = cam
-# Attribute/key names in the cam dictionary are identical to Blender internal
-# references to the same data, except for the following which were given symbols
-# for brevity and clarity.
+# Attribute/key names in the cam dictionary are identical to Blender internal references to the same
+# data, except for the following which were given custom symbols for brevity and clarity.
 # 'rot_eul0x_deg' is the symbol for 'scene.camera.rotation_euler[0] in degrees'  # X
 # 'rot_eul1y_deg' is the symbol for 'scene.camera.rotation_euler[1] in degrees'  # Y
 # 'rot_eul2z_deg' is the symbol for 'scene.camera.rotation_euler[2] in degrees'  # Z
@@ -75,7 +76,7 @@ class Camera:
         scene.render.resolution_y = self.cam['render_resolution_y']
 
         # Camera Scale [UNUSED/UNTESTED]
-        # Try this out. We can read the data via: bpy.data.objects['Camera'].scale.x etc.
+        # TODO: Try this out. We can read the data via: bpy.data.objects['Camera'].scale.x etc.
         # Noting that we are using scene.camera instead of bpy.data.objects['Camera']
         # in the below proposed method to set camera scale values.
         # And scene = bpy.data.scenes["Scene"] .. SO:
@@ -83,14 +84,18 @@ class Camera:
         #
         # scene.camera.scale.x = self.cam['scene.camera.scale.x']
         # scene.camera.scale.y = self.cam['scene.camera.scale.y']
-        # scene.camera.scale.z = self.dcam['scene.camera.scale.z']
+        # scene.camera.scale.z = self.cam['scene.camera.scale.z']
 
 
-################################ MAIN EXECUTION ###############################
-# Direct execution is not supported in this module and it is only intended to be imported.
+########################################## MAIN EXECUTION ##########################################
+# Direct execution is not supported in this file or this module and it is only intended to be
+# imported.
 
-# if __name__ == '__main__':
-#     sys.exit(f"This file [{__file__}] is meant to be imported, not executed directly.")
+
+if __name__ == '__main__':
+    sys.exit("This file [{}] is part of the boablend module which is meant to be imported, "
+             "not executed directly.".format(__file__))
+
 
 ##
 #

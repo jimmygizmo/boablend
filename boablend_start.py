@@ -14,7 +14,7 @@ import os
 ###############################################################################
 # Add the current directory to the list of directories Python will search to
 # find modules for importing. In the current format, this project is only
-# executed from within Blender using the built in Python environment. Importing
+# executed from within Blender using the built-in Python environment. Importing
 # of Boablend from the current project/repository directory is enabled in this
 # manner so that the Boablend module does not need to be installed within
 # Blender's python envirnoment. This configuration may change in the future as
@@ -28,7 +28,7 @@ import boablend
 # executed, any Boablend code changes will be picked up. This is necessary in
 # the case that the Blender file containing the Boablend hook has not been
 # restarted because Blender's Python environment internally caches imported
-# modules and this cache persist while the blend file is open.
+# modules and this cache persists while the blend file is open.
 import importlib
 importlib.reload(boablend)
 ###############################################################################
