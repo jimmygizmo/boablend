@@ -1,4 +1,7 @@
 #! /usr/bin/env python3
+# This module code is not meant to be executed, but the shebang is here in case an
+# attempt is made. At the end of this file, a __main__ block will issue an informative
+# warning if direct execution occurs for whatever reason.
 
 # The import of bpy works within Blender. However, extra steps are needed in order to
 # make it work for external execution as well as to make it recognized by the IDE
@@ -83,7 +86,7 @@ class Camera:
         # scene.camera.scale.z = self.dcam['scene.camera.scale.z']
 
 
-########################################## MAIN EXECUTION ##########################################
+################################ MAIN EXECUTION ###############################
 # Direct execution is not supported in this module and it is only intended to be imported.
 
 # if __name__ == '__main__':
