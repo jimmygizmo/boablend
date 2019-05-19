@@ -32,12 +32,14 @@ dir = os.path.dirname(bpy.data.filepath)
 if not dir in sys.path:
     sys.path.append(dir)
 import boablend
+import boablend.camera
 # Importlib's reload() is used to ensure that every time this project is executed, any Boablend code
 # changes will be picked up. This is necessary in the case that the Blender file containing the
 # Boablend hook has not been restarted because Blender's Python environment internally caches
 # imported modules and this cache persists while the blend file is open.
 import importlib
 importlib.reload(boablend)
+importlib.reload(boablend.camera)
 ####################################################################################################
 
 
@@ -65,16 +67,16 @@ rgb_cube_tower_camera_settings = {
 
 
 # New instance of boablend.Camera with the specified settings:
-main_camera = boablend.Camera(bpy, cam=rgb_cube_tower_camera_settings)
+#main_camera = boablend.camera.Camera(bpy, cam=rgb_cube_tower_camera_settings)
 
 # New instance of boablend.Camera which will use the class default settings:
-#main_camera = boablend.Camera(bpy)
+main_camera = boablend.camera.Camera(bpy)
 
 # Apply the camera settings currently stored in this instance to the current blend file:
 #main_camera.apply_camera()
 
 # Read the camera settings in the current blend file and store them in this instance:
-#main_camera.get_camera()
+main_camera.get_camera()
 
 # Log the camera settings currently stored in this instance to the console:
 main_camera.log_camera()
