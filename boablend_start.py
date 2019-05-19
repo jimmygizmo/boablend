@@ -11,6 +11,18 @@ import bpy
 import sys
 import os
 
+# TODO: IMPROVE THINGS WITH pip install -e.
+# if we use setup.py correctly AND include a step to 'pip install -e .' into
+# the .venv, then the idea is that any changes to the code WILL be immediately
+# picked up within the .venv thus eliminating the need for the path hack,
+# for testing anyhow.
+# It is not yet clear if this will also eliminate the need for the below but
+# it might lead to something along those lines. See, we should use the .venv
+# for more than just the IDE and /tests/ but it is not clear how Blender fits
+# into that. Again, it may be that this is another thing we need to enable
+# 'external execution and hence the import of bpy etc.' .. to be able to do.
+
+
 ###############################################################################
 # Add the current directory to the list of directories Python will search to
 # find modules for importing. In the current format, this project is only
