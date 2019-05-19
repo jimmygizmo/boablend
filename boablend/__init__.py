@@ -15,12 +15,10 @@
 # See the build error log in this repo and comments in init.sh for more information on the bpy build
 # failure. This does not prevent the use of boablend within Blender, but it would be nice to fix for
 # a more complete and full-featured project.
-#
-# THE BPY NAMESPACE IS IN FACT PASSED INTO THE LIBRARY BY THE ENTRY POINT CODE AS A CONSTRUCTOR OR
-# METHOD ARGUMENT. IT MIGHT BE POSSIBLE TO DO THIS ONLY WITH THE CONSTRUCTOR. MIGHT NOT BE
-# NECESSARY IN THE METHODS. JUST STORE IT AS self.bpy FOR METHODS TO USE.
+
 
 import sys
+import pprint
 
 
 # For converting XYZ Degrees values to Euler Values for Rotation
@@ -30,27 +28,53 @@ DEG_TO_EUL_FACTOR = (PI/180.0)  # 0.0174532925
 # For converting Euler Values for Rotation to XYZ Degrees values
 EUL_TO_DEG_FACTOR = (180.0/PI) # 57.29577957855229
 
+# These default_camera settings are stored in a new Camera instance when no such settings are
+# supplied to the Camera constructor. These settings are not particularly useful since they
+# represent a camera directly over the origin at a height of 10 units, pointing directly down, with
+# Blender default FOV and resolution settings. These default settings are mostly useful during
+# development as they are unique enough to be able to easily tell if the Blender defaults or the
+# boablend.Camera defaults are the currently applied settings. Later, when development of
+# boablend.Camera is not so active, perhaps these defaults should just be identical to Blender's.
+default_camera = {
+                'name': 'Camera',
+                'comment': 'boablend.Camera default values',
+                'scene.camera.location.x': 0.0,
+                'scene.camera.location.y': 0.0,
+                'scene.camera.location.z': 10.0,
+                'rot_eul0x_deg': 0.0,
+                'rot_eul1y_deg': 0.0,
+                'rot_eul2z_deg': 0.0,
+                'render_resolution_x': 1920,
+                'render_resolution_y': 1080,
+                'scene.camera.data.angle': 49.134342133748646
+            }
+
+# These commented-out settings include the scale attributes, which are not currently supported,
+# but may be in the near future.
+# default_camera = {
+#                 'name': 'Camera',
+#                 'comment': 'boablend.Camera default values',
+#                 'scene.camera.location.x': 67.37174224853516,
+#                 'scene.camera.location.y': 62.108951568603516,
+#                 'scene.camera.location.z': -22.072437286376953,
+#                 'rot_eul0x_deg': 98.04878632691747,
+#                 'rot_eul1y_deg': 0.00013285419354253954,
+#                 'rot_eul2z_deg': -585.7637994372828,
+#                 'scene.camera.scale.x': 1.0,
+#                 'scene.camera.scale.y': 1.0,
+#                 'scene.camera.scale.z': 1.0,
+#                 'render_resolution_x': 854,
+#                 'render_resolution_y': 480,
+#                 'scene.camera.data.angle': 88.22523942116491
+#             }
+
 
 ################################## FUNCTION AND CLASS DEFINITIONS ##################################
 
 
 class Camera:
-    def __init__(self, bpy, cam):
-        if not cam:
-            cam = {
-                'scene.camera.location.x': 67.37174224853516,
-                'scene.camera.location.y': 62.108951568603516,
-                'scene.camera.location.z': -22.072437286376953,
-                'rot_eul0x_deg': 98.04878632691747,
-                'rot_eul1y_deg': 0.00013285419354253954,
-                'rot_eul2z_deg': -585.7637994372828,
-                'scene.camera.scale.x': 1.0,
-                'scene.camera.scale.y': 1.0,
-                'scene.camera.scale.z': 1.0,
-                'render_resolution_x': 854,
-                'render_resolution_y': 480,
-                'scene.camera.data.angle': 88.22523942116491
-            }
+    def __init__(self, bpy, cam=default_camera):
+        self.bpy = bpy
         self.cam = cam
 # Attribute/key names in the cam dictionary are identical to Blender internal references to the same
 # data, except for the following which were given custom symbols for brevity and clarity.
@@ -59,8 +83,8 @@ class Camera:
 # 'rot_eul2z_deg' is the symbol for 'scene.camera.rotation_euler[2] in degrees'  # Z
 
 
-    def setup_camera(self, bpy):
-        scene = bpy.data.scenes["Scene"]
+    def apply_camera(self):
+        scene = self.bpy.data.scenes["Scene"]
 
         # Camera Location
         scene.camera.location.x = self.cam['scene.camera.location.x']
@@ -92,8 +116,10 @@ class Camera:
         # scene.camera.scale.z = self.cam['scene.camera.scale.z']
 
 
-    def get_camera(self, bpy):
-        obj = bpy.data.objects['Camera']  # bpy.types.Camera
+    def get_camera(self):
+        obj = self.bpy.data.objects['Camera']  # bpy.types.Camera
+        self.cam['name'] = 'Main Camera'
+        self.cam['comment'] = 'from boablend.Camera.get_camera'
 
         # Camera Location
         # NOTE: We had to make these obj.location.* into str() to print them
@@ -109,12 +135,12 @@ class Camera:
         self.cam['rot_eul1y_deg'] = obj.rotation_euler[1]*EUL_TO_DEG_FACTOR
         self.cam['rot_eul2z_deg'] = obj.rotation_euler[2]*EUL_TO_DEG_FACTOR
 
-        # Camera Scale [UNUSED/UNTESTED] - See comments in setup_camera()
+        # Camera Scale [UNUSED/UNTESTED] - See comments in apply_camera()
         # self.cam['scene.camera.scale.x'] = obj.scale.x
         # self.cam['scene.camera.scale.y'] = obj.scale.y
         # self.cam['scene.camera.scale.z'] = obj.scale.z
 
-        scene = bpy.data.scenes["Scene"]
+        scene = self.bpy.data.scenes["Scene"]
 
         # Render Resolution / Aspect Ratio
         self.cam['render_resolution_x'] = scene.render.resolution_x
@@ -123,10 +149,17 @@ class Camera:
         # Camera FOV - Obtained as Euler values, Stored as Degrees.
         self.cam['scene.camera.data.angle'] = scene.camera.data.angle*EUL_TO_DEG_FACTOR
 
+    
+    def log_camera(self):
+        pp = pprint.PrettyPrinter(indent=4)
+        print("Currently stored boablend.Camera settings:")
+        print("NOTE: These are the settings stored in the current boablend.Camera instance and "
+              "may or may not have been applied to the current blend file.")
+        pp.pprint(self.cam)
+
 
 ########################################## MAIN EXECUTION ##########################################
-# Direct execution is not supported in this file or this module and it is only intended to be
-# imported.
+# This module and this file are only intended to be imported for use, not directly executed.
 
 
 if __name__ == '__main__':
