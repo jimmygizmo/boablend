@@ -17,14 +17,14 @@ import sys
 # Set verbose to 'True' to see the values at each step. 
 # When you are done learning how this context.py file works, leave verbose = False.
 
-verbose = True
+verbose = False
 
 # __file__ is the relative path to the current file.
 current_filename = __file__
 if verbose:
     print("__file__: {}".format(current_filename))
 
-# And the directory name in this case just '.' which of course means the current directory
+# And the directory name in this case is just '.' which of course means the current directory.
 os_path_dirname = os.path.dirname(current_filename)
 if verbose:
     print("os_path_dirname: {}".format(os_path_dirname))
@@ -42,9 +42,11 @@ if verbose:
 # If you are looking at the output from the verbose mode, you may see joined_with_parent_dir
 # as './..'. At least in the default configuration with /tests/ within the project/repo root,
 # on MacOS you may. Of course '.' equates to /path/to/project_repo_root/tests which is
-# /path/to/boablend/tests. Hence this equates to /path/to/project_repo_root or 
+# /path/to/boablend/tests. Hence './..' equates to /path/to/project_repo_root or 
 # /path/to/boablend. And this is where the 'boablend' module directory is located which is what
 # needs to be imported. Remember, we need to add the path to the dir to SEARCH for 'boablend'.
+# Said another way, we need to add the path to the directory where we will FIND the 'boablend'
+# MODULE directory.
 
 # We need this as an absolute path, hence:
 absolute_path = os.path.abspath(joined_with_parent_dir)
