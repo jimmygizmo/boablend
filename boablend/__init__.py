@@ -15,6 +15,10 @@
 # See the build error log in this repo and comments in init.sh for more information on the bpy build
 # failure. This does not prevent the use of boablend within Blender, but it would be nice to fix for
 # a more complete and full-featured project.
+#
+# THE BPY NAMESPACE IS IN FACT PASSED INTO THE LIBRARY BY THE ENTRY POINT CODE AS A CONSTRUCTOR OR
+# METHOD ARGUMENT. IT MIGHT BE POSSIBLE TO DO THIS ONLY WITH THE CONSTRUCTOR. MIGHT NOT BE
+# NECESSARY IN THE METHODS. JUST STORE IT AS self.bpy FOR METHODS TO USE.
 
 import sys
 
@@ -72,6 +76,7 @@ class Camera:
         # Camera FOV - Degrees
         scene.camera.data.angle = self.cam['scene.camera.data.angle']*DEG_TO_EUL_FACTOR
 
+        # Render Resolution / Aspect Ratio
         scene.render.resolution_x = self.cam['render_resolution_x']
         scene.render.resolution_y = self.cam['render_resolution_y']
 
@@ -85,6 +90,38 @@ class Camera:
         # scene.camera.scale.x = self.cam['scene.camera.scale.x']
         # scene.camera.scale.y = self.cam['scene.camera.scale.y']
         # scene.camera.scale.z = self.cam['scene.camera.scale.z']
+
+
+    def get_camera(self, bpy):
+        obj = bpy.data.objects['Camera']  # bpy.types.Camera
+
+        # Camera Location
+        # NOTE: We had to make these obj.location.* into str() to print them
+        # but it is most likely that we do not need to do anything like that to
+        # store or use them to set a camera. Just making a note on this.
+        self.cam['scene.camera.location.x'] = obj.location.x
+        self.cam['scene.camera.location.y'] = obj.location.y
+        self.cam['scene.camera.location.z'] = obj.location.z
+
+        # Camera Rotation - Degrees - Rotation Mode: 'XYZ Euler'/'XYZ'
+        # Obtained as Euler values, Stored as Degrees.
+        self.cam['rot_eul0x_deg'] = obj.rotation_euler[0]*EUL_TO_DEG_FACTOR
+        self.cam['rot_eul1y_deg'] = obj.rotation_euler[1]*EUL_TO_DEG_FACTOR
+        self.cam['rot_eul2z_deg'] = obj.rotation_euler[2]*EUL_TO_DEG_FACTOR
+
+        # Camera Scale [UNUSED/UNTESTED] - See comments in setup_camera()
+        # self.cam['scene.camera.scale.x'] = obj.scale.x
+        # self.cam['scene.camera.scale.y'] = obj.scale.y
+        # self.cam['scene.camera.scale.z'] = obj.scale.z
+
+        scene = bpy.data.scenes["Scene"]
+
+        # Render Resolution / Aspect Ratio
+        self.cam['render_resolution_x'] = scene.render.resolution_x
+        self.cam['render_resolution_y'] = scene.render.resolution_y
+
+        # Camera FOV - Obtained as Euler values, Stored as Degrees.
+        self.cam['scene.camera.data.angle'] = scene.camera.data.angle*EUL_TO_DEG_FACTOR
 
 
 ########################################## MAIN EXECUTION ##########################################
