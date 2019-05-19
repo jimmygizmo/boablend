@@ -1,18 +1,24 @@
-# .gitignore
+# .gitignore - Boablend Python, Blender project.
 
-# Python virtual environment directory
+# Python virtual environment directory:
 .venv
 
 # Python cache
 __pycache__
 
-# Python compiled bytecode files from imported modules
+# Python compiled bytecode files from imported modules:
 *.pyc
 
-# MacOS Finder custom attributes file
+# Setuptools distribution folder:
+/dist/
+
+# Python egg metadata, regenerated from source files by setuptools:
+/*.egg-info
+
+# MacOS Finder custom attributes file:
 .DS_Store
 
-# Blender files
+# Blender files:
 #*.blend
 #*.blend[1-9]
 
