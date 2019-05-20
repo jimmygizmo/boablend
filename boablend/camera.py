@@ -49,25 +49,6 @@ default_camera = {
                 'scene.camera.data.angle': 49.134342133748646
             }
 
-# These commented-out settings include the scale attributes, which are not currently supported,
-# but may be in the near future.
-# default_camera = {
-#                 'name': 'Camera',
-#                 'comment': 'boablend.Camera default values',
-#                 'scene.camera.location.x': 67.37174224853516,
-#                 'scene.camera.location.y': 62.108951568603516,
-#                 'scene.camera.location.z': -22.072437286376953,
-#                 'rot_eul0x_deg': 98.04878632691747,
-#                 'rot_eul1y_deg': 0.00013285419354253954,
-#                 'rot_eul2z_deg': -585.7637994372828,
-#                 'scene.camera.scale.x': 1.0,
-#                 'scene.camera.scale.y': 1.0,
-#                 'scene.camera.scale.z': 1.0,
-#                 'render_resolution_x': 854,
-#                 'render_resolution_y': 480,
-#                 'scene.camera.data.angle': 88.22523942116491
-#             }
-
 
 ################################## FUNCTION AND CLASS DEFINITIONS ##################################
 
@@ -104,17 +85,6 @@ class Camera:
         scene.render.resolution_x = self.cam['render_resolution_x']
         scene.render.resolution_y = self.cam['render_resolution_y']
 
-        # Camera Scale [UNUSED/UNTESTED]
-        # TODO: Try this out. We can read the data via: bpy.data.objects['Camera'].scale.x etc.
-        # Noting that we are using scene.camera instead of bpy.data.objects['Camera']
-        # in the below proposed method to set camera scale values.
-        # And scene = bpy.data.scenes["Scene"] .. SO:
-        # bpy.data.objects['Camera'] = bpy.data.scenes["Scene"].camera
-        #
-        # scene.camera.scale.x = self.cam['scene.camera.scale.x']
-        # scene.camera.scale.y = self.cam['scene.camera.scale.y']
-        # scene.camera.scale.z = self.cam['scene.camera.scale.z']
-
 
     def get_camera(self):
         obj = self.bpy.data.objects['Camera']  # bpy.types.Camera
@@ -134,11 +104,6 @@ class Camera:
         self.cam['rot_eul0x_deg'] = obj.rotation_euler[0]*EUL_TO_DEG_FACTOR
         self.cam['rot_eul1y_deg'] = obj.rotation_euler[1]*EUL_TO_DEG_FACTOR
         self.cam['rot_eul2z_deg'] = obj.rotation_euler[2]*EUL_TO_DEG_FACTOR
-
-        # Camera Scale [UNUSED/UNTESTED] - See comments in apply_camera()
-        # self.cam['scene.camera.scale.x'] = obj.scale.x
-        # self.cam['scene.camera.scale.y'] = obj.scale.y
-        # self.cam['scene.camera.scale.z'] = obj.scale.z
 
         scene = self.bpy.data.scenes["Scene"]
 

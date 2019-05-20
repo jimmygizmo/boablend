@@ -11,15 +11,14 @@ import bpy
 import sys
 import os
 
-# TODO: IMPROVE THINGS WITH pip install -e.
-# If we use setup.py correctly AND include a step to 'pip install -e .' into the .venv, then the
-# idea is that any changes to the code WILL be immediately picked up within the .venv thus
-# eliminating the need for the path hack, for testing anyhow.
-# It is not yet clear if this will also eliminate the need for the below but it might lead to
-# something along those lines. See, we should use the .venv for more than just the IDE and /tests/
-# but it is not clear how Blender fits into that. Again, it may be that this is another thing we
-# need to enable 'external execution and hence the import of bpy etc.' .. to be able to do.
+# TODO: If and when we can execute things outside of Blender, we can improve things a lot and
+# eliminate the need for any path hacks by using 'pip install -e .' The -e option of pip install
+# in this local install context will perform the module install using symlinks and then we can
+# develop the module in its repository location and the .venv will immediately reflect the changes.
+# setup.py will need to be in the correct format.
 
+# Since we are currently only executing from within Blender, we will still need to use the
+# following path hack.
 
 ####################################################################################################
 # Add the current directory of the current blend file to the list of directories Python will search
@@ -57,10 +56,6 @@ rgb_cube_tower_camera_settings = {
     'scene.camera.data.angle': 88.22523942116491
 }
 
-# At a later date, camera scale values may also be supported, but currently are not:
-    # 'scene.camera.scale.x': 1.0,
-    # 'scene.camera.scale.y': 1.0,
-    # 'scene.camera.scale.z': 1.0,
 
 
 ########################################## MAIN EXECUTION ##########################################

@@ -2,84 +2,53 @@
 ####################################################################################################
 ####################################### BOABLEND ENTRY POINT #######################################
 
+# This is the new DISPATCHING implementation of the boablend entry point.
+# Just introduced the concept of 'boas'.
 
 # This 'import bpy' will show as broken in the IDE if bpy is not installed in the external
 # environment, however since this script is invoked via exec() from within the Blender internal
 # Python environment, it will be imported successfully there.
-import bpy
+#import bpy
 
-import sys
 import os
 
-# TODO: IMPROVE THINGS WITH pip install -e.
-# If we use setup.py correctly AND include a step to 'pip install -e .' into the .venv, then the
-# idea is that any changes to the code WILL be immediately picked up within the .venv thus
-# eliminating the need for the path hack, for testing anyhow.
-# It is not yet clear if this will also eliminate the need for the below but it might lead to
-# something along those lines. See, we should use the .venv for more than just the IDE and /tests/
-# but it is not clear how Blender fits into that. Again, it may be that this is another thing we
-# need to enable 'external execution and hence the import of bpy etc.' .. to be able to do.
+verbose = True
 
+boadir = 'boas'
 
-####################################################################################################
-# Add the current directory to the list of directories Python will search to find modules for
-# importing. In the current format, this project is only executed from within Blender using the
-# built-in Python environment. Importing of Boablend from the current project/repository directory
-# is enabled in this manner so that the Boablend module does not need to be installed within
-# Blender's python envirnoment. This configuration may change in the future as there are a few other
-# execution/module-installation configurations under consideration.
-dir = os.path.dirname(bpy.data.filepath)
-if not dir in sys.path:
-    sys.path.append(dir)
-import boablend
-import boablend.camera
-# Importlib's reload() is used to ensure that every time this project is executed, any Boablend code
-# changes will be picked up. This is necessary in the case that the Blender file containing the
-# Boablend hook has not been restarted because Blender's Python environment internally caches
-# imported modules and this cache persists while the blend file is open.
-import importlib
-importlib.reload(boablend)
-importlib.reload(boablend.camera)
-####################################################################################################
+# What is a 'boa'?
+# A 'blender omnipotent automator' of course!
+# BOA = Blender Omnipotent Automator
 
+# Frankly, it is most likely true that 'boas' can't automate Blender in EVERY possible way, but the
+# goal of the 'boablend' project is to potentially enable ANY kind of Blender automation or
+# development with maximum flexibility and following both python and Blender best-practices.
+# .. and I needed words that started with b, o and a .. hence 'omnipotent' .. i.e. more accurately;
+# 'very flexible, powerful and relatively simple to use, with cool bundled functionality.' .. mkay?
+# 'Automator' is a nice, flexible concept too. Automation is the genesis and most-likely the most
+# common useful application of boablend, but the project goal is to enable and empower development
+# with and of Blender in multiple contexts, including gaming and more .. so 'automator' is meant in
+# a very general and poetic sense here.
+# It is going to be fun to call boablend projects, modules, sub-modules, mini-applications, add-ons
+# simulations, plug-ins or whatever (get the idea?) .. 'boas'.
+# This is all Python, right? Well names derived from 'python/py' were sort of all taken up .. so
+# here we are playing with boas .. and Blender .. and boablend!
 
-rgb_cube_tower_camera_settings = {
-    'name': 'RGB Cube Tower Camera',
-    'comment': 'boablend.Camera settings for the RGB Cube Tower project',
-    'scene.camera.location.x': 67.37174224853516,
-    'scene.camera.location.y': 62.108951568603516,
-    'scene.camera.location.z': -22.072437286376953,
-    'rot_eul0x_deg': 98.04878632691747,
-    'rot_eul1y_deg': 0.00013285419354253954,
-    'rot_eul2z_deg': -585.7637994372828,
-    'render_resolution_x': 854,
-    'render_resolution_y': 480,
-    'scene.camera.data.angle': 88.22523942116491
-}
+default_boa = 'rgb_cube_tower.py'
 
-# At a later date, camera scale values may also be supported, but currently are not:
-    # 'scene.camera.scale.x': 1.0,
-    # 'scene.camera.scale.y': 1.0,
-    # 'scene.camera.scale.z': 1.0,
+if verbose:
+    print()
+    print("~ ~ ~ ~ ~ Boablend dispatching boa: {}".format(default_boa))
 
+boa_sub_path = os.path.join(boadir, default_boa)
 
-########################################## MAIN EXECUTION ##########################################
+boapath = bpy.path.abspath("//{}".format(boa_sub_path))
 
+if verbose:
+    print("Executing boa at: ")
+    print(boapath)
 
-# New instance of boablend.Camera with the specified settings:
-main_camera = boablend.camera.Camera(bpy, cam=rgb_cube_tower_camera_settings)
-
-# New instance of boablend.Camera which will use the class default settings:
-#main_camera = boablend.camera.Camera(bpy)
-
-# Apply the camera settings currently stored in this instance to the current blend file:
-main_camera.apply_camera()
-
-# Read the camera settings in the current blend file and store them in this instance:
-#main_camera.get_camera()
-
-# Log the camera settings currently stored in this instance to the console:
-main_camera.log_camera()
+exec(compile(open(boapath).read(), boapath, 'exec'))
 
 
 ##
