@@ -1,14 +1,15 @@
 
 ####################################################################################################
-######################################## BOABLEND DISPATCH #########################################
+####################################### BOABLEND ENTRY POINT #######################################
 
+# This is the new DISPATCHING implementation of the boablend entry point.
+# Just introduced the concept of 'boas'.
 
 # This 'import bpy' will show as broken in the IDE if bpy is not installed in the external
 # environment, however since this script is invoked via exec() from within the Blender internal
 # Python environment, it will be imported successfully there.
-import bpy
+#import bpy
 
-#import sys
 import os
 
 verbose = True
@@ -37,7 +38,7 @@ default_boa = 'rgb_cube_tower.py'
 
 if verbose:
     print()
-    print("~~~~~~~~~~ Boablend dispatching boa: {}".format(default_boa))
+    print("~ ~ ~ ~ ~ Boablend dispatching boa: {}".format(default_boa))
 
 boa_sub_path = os.path.join(boadir, default_boa)
 

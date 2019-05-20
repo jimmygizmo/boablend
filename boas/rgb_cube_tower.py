@@ -1,6 +1,6 @@
 
 ####################################################################################################
-####################################### BOABLEND ENTRY POINT #######################################
+# BOA: rgb_cube_tower
 
 
 # This 'import bpy' will show as broken in the IDE if bpy is not installed in the external
@@ -22,12 +22,12 @@ import os
 
 
 ####################################################################################################
-# Add the current directory to the list of directories Python will search to find modules for
-# importing. In the current format, this project is only executed from within Blender using the
-# built-in Python environment. Importing of Boablend from the current project/repository directory
-# is enabled in this manner so that the Boablend module does not need to be installed within
-# Blender's python envirnoment. This configuration may change in the future as there are a few other
-# execution/module-installation configurations under consideration.
+# Add the current directory of the current blend file to the list of directories Python will search
+# to find modules for importing. In the current format, this project is only executed from within
+# Blender using the built-in Python environment. Importing of Boablend from the current
+# project/repository directory is enabled in this manner so that the Boablend module does not need
+# to be installed within Blender's python envirnoment. This configuration may change in the future
+# as there are a few other execution/module-installation configurations under consideration.
 dir = os.path.dirname(bpy.data.filepath)
 if not dir in sys.path:
     sys.path.append(dir)
@@ -67,16 +67,16 @@ rgb_cube_tower_camera_settings = {
 
 
 # New instance of boablend.Camera with the specified settings:
-main_camera = boablend.camera.Camera(bpy, cam=rgb_cube_tower_camera_settings)
+#main_camera = boablend.camera.Camera(bpy, cam=rgb_cube_tower_camera_settings)
 
 # New instance of boablend.Camera which will use the class default settings:
-#main_camera = boablend.camera.Camera(bpy)
+main_camera = boablend.camera.Camera(bpy)
 
 # Apply the camera settings currently stored in this instance to the current blend file:
-main_camera.apply_camera()
+#main_camera.apply_camera()
 
 # Read the camera settings in the current blend file and store them in this instance:
-#main_camera.get_camera()
+main_camera.get_camera()
 
 # Log the camera settings currently stored in this instance to the console:
 main_camera.log_camera()

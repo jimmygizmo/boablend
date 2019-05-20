@@ -10,7 +10,7 @@
 ####################################################################################################
 
 import bpy  # See comments below about bpy import errors showning in your IDE.
-import os
+
 
 # Set verbose to True to print status and diagnostic info to STDOUT.
 # This flag only affects output from this hook code.
@@ -55,11 +55,16 @@ if verbose:
     print()
     print("~~~~~~~~~~~~~~~~~~~~ Boablend starting.")
 
-current_working_directory = os.getcwd()
+# Current working directory is not so relevant here. It appears (at least on MacOS) to be the
+# user's home directory of the user running Blender and so is not relevant to the current
+# blend file, which is the reference point we currently use in how boablend is imported and
+# executed. So we won't log it anymore from here.
+# import os
+# current_working_directory = os.getcwd()
+# print("Blender file current working directory: ")
+# print(current_working_directory)
 
 if verbose:
-    print("Blender file current working directory: ")
-    print(current_working_directory)
     print("Boablend entry point filename: {}".\
         format(boablend_entry_point))
 
