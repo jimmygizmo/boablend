@@ -190,9 +190,89 @@ for a in range(0, cubes_z_height):
             current_x_position += cube_side_length
 
 
-# World and Animation Setup
+####################################################################################################
+# Remaining Manual Steps Requiring Automation
+#
+# Most or all settings detailed below were the ones used for the demo YouTube video rendering:
+# https://www.youtube.com/watch?v=1j7_nHfTeaw
 
-# - Go into World, Rigid Body Physics
+# - - - - - - - - - -
+
+# - Instantiate floor plane.
+# - Position/lower floor plane for desired fall height.
+# - X,Y are 0,0. Z position is -38.88964.
+# bpy.context.object.location[2] = -38.8896
+# # - Plane scale XYZ are all 86.784.
+# bpy.context.object.scale[0] = 86.7839
+# bpy.context.object.scale[1] = 86.7839
+# bpy.context.object.scale[2] = 86.7839
+
+# - - - - - - - - - -
+
+# - Go into Scene, Rigid Body World.
+# bpy.context.space_data.context = 'SCENE'
+# - Increase quality of animation by setting Steps Per Second.
+# - 500 = good/high quality (Used for the example YouTube video.) Lower setting = faster render.
+
+# - In Rigid Body Cache sub-section, set end point to 760 (frames).
+# Before baking it is probably a good idea to trigger/click Free All Bakes, maybe also Free Bake
+# which would be best to do first. Free Bake probably is not possible if there has never been bake
+# and the same should be looked into for Free All Bakes.
+# Free All Bakes: bpy.ops.ptcache.free_bake_all()
+# Need the code for Free Bake.
+# - Trigger (Click) Bake. This bake may take about 10 minutes.
+# bpy.ops.ptcache.bake(bake=True)
+# - Nearly all cubes have stopped moving after about 760 frames. Total duration about 9 seconds.
+
+# - - - - - - - - - -
+
+# - Set animation timeline end frame to 760 to match the physics bake.
+# bpy.context.area.type = 'TIMELINE'
+# bpy.context.scene.frame_end = 700
+
+# - - - - - - - - - -
+
+# Add a light of type Sun. ('layers' argument has been removed from below command for brevity.)
+# bpy.ops.object.lamp_add(type='SUN', radius=1, view_align=False,
+#     location=(-9.51748, 7.88541, -10.5362))
+# The above values are not correct. Use the following:
+# bpy.context.object.location[0] = 28.1261
+# bpy.context.object.location[1] = -14.7615
+# bpy.context.object.location[2] = 54.1666
+# bpy.context.object.rotation_euler[0] = 0.265283
+# bpy.context.object.rotation_euler[1] = -0.0242171
+# bpy.context.object.rotation_euler[2] = 0.0888926
+# The Sun's Strength needs to be set to 7 and this requires creating a Node.
+# ** Node creation code not shown here, just the selection/setting of the Strength value.
+# bpy.data.node_groups["Shader Nodetree"].nodes["Emission"].inputs[1].default_value = 7
+# ** Attemted recreating Node and only the same setting code was generated.
+# IMPORTANT: Above notes are from Blender 2.79, but things are different and actually more clear
+# with Blender 2.80b. Nodes do not appear to be involved and things are straightforward:
+# bpy.ops.object.light_add(type='SUN', radius=1, view_align=False, location=(0, 0, 0))
+# bpy.context.space_data.context = 'DATA'
+# bpy.context.object.data.energy = 7
+# DECISION: Other differences between 2.79 and 2.80 have been noted elsewhere, but this difference
+# is significant enough that the boablend project going forward will only support Blender 2.80.
+
+# - - - - - - - - - -
+
+# Set up render engine and render settings. See original Olav3D utorial video at 9:09.
+# https://www.youtube.com/watch?v=KI0tjZUkb5A
+
+# - - - - - - - - - -
+
+
+
+# - - - - - - - - - -
+
+
+
+# - - - - - - - - - -
+
+
+
+# - - - - - - - - - -
+
 
 
 
