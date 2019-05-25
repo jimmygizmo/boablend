@@ -70,9 +70,9 @@ class Camera:
         # to something else and then to apply it. It could be argued whether or not apply should be
         # a separate action but we will leave it like that for now.
     def set_camera(self, cam):
-        # ENFORCE: cam must be supplied and we should inforce the exact type of dictionary with the
+        # ENFORCE: cam must be supplied and we should enforce the exact type of dictionary with the
         # exact specified keys. We need to look at how we could enforce just the format, but allow
-        # the absence in the __init__
+        # the absence in the __init__ since that is the mode to get the built in default.
         pass
 
 
@@ -131,28 +131,6 @@ class Camera:
         self.cam['scene.camera.data.angle'] = scene.camera.data.angle*EUL_TO_DEG_FACTOR
 
         return self.cam
-
-    # TESTS COMPLETE: No longer needed:
-    # def sys_path_context__camera(self):
-    #     print("sys.path from code living in boablend.camera - which was imported via path hack in boa file.")
-    #     print("sys_path_context__camera executed from boa file")
-    #     print("--".join(sys.path))
-    
-    # Maybe a camera-resident logging method is justified at some point but for now we are using
-    # the new boabled.util.Logger and doing it all from client/app (boa) code.
-    # REMOVE perhaps with a better comment about future logging direct from the camera module. Need
-    # to think abou the use cases and need. One thing could be camera-instance specific state,
-    # logged from the perspective of the instance, not so much from user/app code context/perspective,
-    # such as .. was it ever set, if so when, was it applied, if so when, was it 'gotten' if so when?
-    # Are these useful things? Maybe not but if so then that is the kind of logging we might possible
-    # do from class-resident logging methods. This is sort of a design pattern issue to be
-    # investigated.
-    # def log_camera(self):
-    #     pp = pprint.PrettyPrinter(indent=4)
-    #     print("Currently stored boablend.Camera settings:")
-    #     print("NOTE: These are the settings stored in the current boablend.Camera instance and "
-    #           "may or may not have been applied to the current blend file.")
-    #     pp.pprint(self.cam)
 
 
 ########################################## MAIN EXECUTION ##########################################

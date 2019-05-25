@@ -4,10 +4,6 @@
 import pprint
 import sys
 
-# Moving this into the Logger class __init__, which is more specifically where it will be used.
-# This is a more logical/correct location for it.
-# pp = pprint.PrettyPrinter(indent=4)
-
 
 ################################## FUNCTION AND CLASS DEFINITIONS ##################################
 
