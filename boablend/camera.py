@@ -20,6 +20,9 @@
 import sys
 import pprint
 
+# Test import:
+import boablend.util
+
 from boablend.constants import *  # Ignore IDE warning that this is unused. This type of
 # import is not normally recommended but is ok for just importing a namespace of very uniquely
 # named and special purpose constants and where there is not a practice of defining similar
@@ -129,11 +132,21 @@ class Camera:
 
         return self.cam
 
-    def sys_path_context__camera(self):
-        print("sys.path from code living in boablend.camera - which was imported via path hack in boa file.")
-        print("ys_path_context__camera executed from boa file")
-        print("--".join(sys.path))
+    # TESTS COMPLETE: No longer needed:
+    # def sys_path_context__camera(self):
+    #     print("sys.path from code living in boablend.camera - which was imported via path hack in boa file.")
+    #     print("sys_path_context__camera executed from boa file")
+    #     print("--".join(sys.path))
     
+    # Maybe a camera-resident logging method is justified at some point but for now we are using
+    # the new boabled.util.Logger and doing it all from client/app (boa) code.
+    # REMOVE perhaps with a better comment about future logging direct from the camera module. Need
+    # to think abou the use cases and need. One thing could be camera-instance specific state,
+    # logged from the perspective of the instance, not so much from user/app code context/perspective,
+    # such as .. was it ever set, if so when, was it applied, if so when, was it 'gotten' if so when?
+    # Are these useful things? Maybe not but if so then that is the kind of logging we might possible
+    # do from class-resident logging methods. This is sort of a design pattern issue to be
+    # investigated.
     # def log_camera(self):
     #     pp = pprint.PrettyPrinter(indent=4)
     #     print("Currently stored boablend.Camera settings:")

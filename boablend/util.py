@@ -2,8 +2,11 @@
 ####################################################################################################
 
 import pprint
+import sys
 
-pp = pprint.PrettyPrinter(indent=4)
+# Moving this into the Logger class __init__, which is more specifically where it will be used.
+# This is a more logical/correct location for it.
+# pp = pprint.PrettyPrinter(indent=4)
 
 
 ################################## FUNCTION AND CLASS DEFINITIONS ##################################
@@ -11,13 +14,23 @@ pp = pprint.PrettyPrinter(indent=4)
 
 class Logger:
     def __init__(self):
-        pass
+        self.pp = pprint.PrettyPrinter(indent=4)
+
+    def line(self):
+        print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
     
     def log(self, msg):
+        self.line()
         print(msg)
 
     def dump(self, obj):
-        pp.pprint(obj)
+        self.line()
+        self.pp.pprint(obj)
+
+    def dump_environment_info(self):
+        self.line()
+        print("sys.path: ")
+        print("\n".join(sys.path))
 
 
 ##

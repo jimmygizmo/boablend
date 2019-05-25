@@ -198,7 +198,7 @@ main_camera.apply_camera()
 # Log the camera settings currently stored in this instance to the console:
 #main_camera.log_camera()
 
-main_camera.sys_path_context__camera()
+logger.dump_environment_info()
 
 
 # Tower Construction
