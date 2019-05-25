@@ -10,6 +10,11 @@ import bpy
 import sys
 import os
 
+from boablend.constants import *  # Ignore IDE warning that this is unused. This type of
+# import is not normally recommended but is ok for just importing a namespace of very uniquely
+# named and special purpose constants and where there is not a practice of defining similar
+# constants in other files.
+
 # TODO: If and when we can execute things outside of Blender, we can improve things a lot and
 # eliminate the need for any path hacks by using 'pip install -e .' The -e option of pip install
 # in this local install context will perform the module install using symlinks and then we can
@@ -26,6 +31,20 @@ import os
 # project/repository directory is enabled in this manner so that the Boablend module does not need
 # to be installed within Blender's python envirnoment. This configuration may change in the future
 # as there are a few other execution/module-installation configurations under consideration.
+# ADDITIONALLY:
+# It may be obvious from some perspectives, but also it is possible to prove the folowing statement
+# by displaying sys.path in various test configurations, but it may be important to note and to
+# advise developers/users of boablend that the following path manilulation (path hack) must be
+# be done in the boa file .. or possibly and maybe even preferably in the boablend_start file or
+# perhaps even better in the boablend_hook code .. but must not be attempted in any of the module
+# files or sub-module files of the library itself. Those module files are imported and we need the
+# path manipulation to be done in the EXECUTING context .. the MAIN code so to speak, not
+# in imported files (when you wamt to import another baoblend module for example) as sys.path may
+# not be the same in that context. (Or it might be .. but this would still be messy and confusing
+# even if it works.)
+# And this loading and then reloading should probably be done immediately after as well.
+# TODO: Do a trial move of this code to either boablend_hook or boablend_start. Might be a better home.
+# Use the diagnostic sys.path display methods.
 dir = os.path.dirname(bpy.data.filepath)
 if not dir in sys.path:
     sys.path.append(dir)
@@ -86,9 +105,13 @@ rgb_cube_tower_camera_settings = {
 # to perform location calculations in the main execution code.
 
 # Dimensions of the tower of cubes as number of cubes:
-cubes_x_width = 8
-cubes_y_depth = 8
-cubes_z_height = 24
+# cubes_x_width = 8
+# cubes_y_depth = 8
+# cubes_z_height = 24
+# 8x8x24 takes about 10 minutes to run. for rapid dev/test iterations, using 4x4x6:
+cubes_x_width = 4
+cubes_y_depth = 4
+cubes_z_height = 6
 
 # Cube dimensions
 #cube_radius = 1
@@ -142,7 +165,7 @@ def instantiate_cube(cube):
                   '_' + str(cube['color_z'])
     mat = bpy.data.materials.new(name=mat_name)
     # TODO: FIX 2.79 vs. 2.80b ISSUE. SETTING mat.diffuse_color NOW APPEARS TO TAKE 4 NOT 3 ARGS.
-    mat.diffuse_color = (cube['color_x'], cube['color_y'], cube['color_z'])
+    mat.diffuse_color = (cube['color_x'], cube['color_y'], cube['color_z'], ALPHA_FULL_OPAQUE)
     # ERROR IN: mat.diffuse_color = (cube['color_x'], cube['color_y'], cube['color_z'])
     # ERROR: ValueError: bpy_struct: item.attr = val: sequences of dimension 0 should contain 4 items, not 3
 
@@ -158,6 +181,12 @@ logger = boablend.util.Logger()
 
 # Camera Setup
 
+# First before changing any camera settings and for illustrative purposes, let's retrieve the
+# current camera settings and dump them to the log.
+
+# Read the camera settings in the current blend file and store them in this instance.
+#main_camera.get_camera()
+
 logger.dump(rgb_cube_tower_camera_settings)
 
 # New instance of boablend.Camera with the specified settings:
@@ -165,9 +194,6 @@ main_camera = boablend.camera.Camera(bpy, cam=rgb_cube_tower_camera_settings)
 
 # Apply the camera settings currently stored in this instance to the current blend file:
 main_camera.apply_camera()
-
-# Read the camera settings in the current blend file and store them in this instance:
-#main_camera.get_camera()
 
 # Log the camera settings currently stored in this instance to the console:
 #main_camera.log_camera()

@@ -20,13 +20,11 @@
 import sys
 import pprint
 
+from boablend.constants import *  # Ignore IDE warning that this is unused. This type of
+# import is not normally recommended but is ok for just importing a namespace of very uniquely
+# named and special purpose constants and where there is not a practice of defining similar
+# constants in other files.
 
-# For converting XYZ Degrees values to Euler Values for Rotation
-PI = 3.14159265
-DEG_TO_EUL_FACTOR = (PI/180.0)  # 0.0174532925
-
-# For converting Euler Values for Rotation to XYZ Degrees values
-EUL_TO_DEG_FACTOR = (180.0/PI) # 57.29577957855229
 
 # These default_camera settings are stored in a new Camera instance when no such settings are
 # supplied to the Camera constructor. These settings are not particularly useful since they
@@ -62,6 +60,17 @@ class Camera:
 # 'rot_eul0x_deg' is the symbol for 'scene.camera.rotation_euler[0] in degrees'  # X
 # 'rot_eul1y_deg' is the symbol for 'scene.camera.rotation_euler[1] in degrees'  # Y
 # 'rot_eul2z_deg' is the symbol for 'scene.camera.rotation_euler[2] in degrees'  # Z
+
+    # TODO:
+        # Add a set_camera_method, because we could also choose to create the instance with some
+        # other settings or even no settings (taking the default) and then want to set this instance
+        # to something else and then to apply it. It could be argued whether or not apply should be
+        # a separate action but we will leave it like that for now.
+    def set_camera(self, cam):
+        # ENFORCE: cam must be supplied and we should inforce the exact type of dictionary with the
+        # exact specified keys. We need to look at how we could enforce just the format, but allow
+        # the absence in the __init__
+        pass
 
 
     def apply_camera(self):
