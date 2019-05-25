@@ -87,6 +87,10 @@ class Camera:
 
 
     def get_camera(self):
+        """Obtains current main camera settings from the active blend file and returns a 
+        dictionary of camera attributes. Does not cover all possible camera attributes,
+        just the ones which Boablend currently deals with."""
+
         obj = self.bpy.data.objects['Camera']  # bpy.types.Camera
         self.cam['name'] = 'Main Camera'
         self.cam['comment'] = 'from boablend.Camera.get_camera'
@@ -114,13 +118,19 @@ class Camera:
         # Camera FOV - Obtained as Euler values, Stored as Degrees.
         self.cam['scene.camera.data.angle'] = scene.camera.data.angle*EUL_TO_DEG_FACTOR
 
+        return self.cam
+
+    def sys_path_context__camera(self):
+        print("sys.path from code living in boablend.camera - which was imported via path hack in boa file.")
+        print("ys_path_context__camera executed from boa file")
+        print("--".join(sys.path))
     
-    def log_camera(self):
-        pp = pprint.PrettyPrinter(indent=4)
-        print("Currently stored boablend.Camera settings:")
-        print("NOTE: These are the settings stored in the current boablend.Camera instance and "
-              "may or may not have been applied to the current blend file.")
-        pp.pprint(self.cam)
+    # def log_camera(self):
+    #     pp = pprint.PrettyPrinter(indent=4)
+    #     print("Currently stored boablend.Camera settings:")
+    #     print("NOTE: These are the settings stored in the current boablend.Camera instance and "
+    #           "may or may not have been applied to the current blend file.")
+    #     pp.pprint(self.cam)
 
 
 ########################################## MAIN EXECUTION ##########################################

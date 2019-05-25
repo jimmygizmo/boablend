@@ -31,6 +31,7 @@ if not dir in sys.path:
     sys.path.append(dir)
 import boablend
 import boablend.camera
+import boablend.util
 # Importlib's reload() is used to ensure that every time this project is executed, any Boablend code
 # changes will be picked up. This is necessary in the case that the Blender file containing the
 # Boablend hook has not been restarted because Blender's Python environment internally caches
@@ -38,6 +39,7 @@ import boablend.camera
 import importlib
 importlib.reload(boablend)
 importlib.reload(boablend.camera)
+importlib.reload(boablend.util)
 ####################################################################################################
 
 
@@ -89,8 +91,10 @@ cubes_y_depth = 8
 cubes_z_height = 24
 
 # Cube dimensions
-cube_radius = 1
-cube_side_length = 2 * cube_radius
+#cube_radius = 1
+cube_size = 2
+#cube_side_length = 2 * cube_radius
+cube_side_length = cube_size
 # Version 2.80b NOTE: Change the attribute name from 'radius' to 'size' and use cube_side_length
 # as the radius. Make sure to change the corresponding variable names for consistency.
 
@@ -98,7 +102,7 @@ cube_defaults = {
     'xloc': 0,
     'yloc': 0,
     'zloc': 0,
-    'radius': cube_radius,
+    'size': cube_size,
     'mass': 20,
     'collision_shape': 'BOX',
     'friction': 1,
@@ -118,7 +122,7 @@ cube_defaults = {
 def instantiate_cube(cube):
     # Create the mesh object.
     bpy.ops.mesh.primitive_cube_add(
-        radius = cube['radius'],
+        size = cube['size'],
         location = (cube['xloc'], cube['yloc'], cube['zloc'])
     )
 
@@ -137,7 +141,10 @@ def instantiate_cube(cube):
                   '_' + str(cube['color_y']) + \
                   '_' + str(cube['color_z'])
     mat = bpy.data.materials.new(name=mat_name)
+    # TODO: FIX 2.79 vs. 2.80b ISSUE. SETTING mat.diffuse_color NOW APPEARS TO TAKE 4 NOT 3 ARGS.
     mat.diffuse_color = (cube['color_x'], cube['color_y'], cube['color_z'])
+    # ERROR IN: mat.diffuse_color = (cube['color_x'], cube['color_y'], cube['color_z'])
+    # ERROR: ValueError: bpy_struct: item.attr = val: sequences of dimension 0 should contain 4 items, not 3
 
     bpy.ops.object.mode_set(mode='OBJECT')  # Can't assign materials in editmode. Enter object mode.
 
@@ -147,7 +154,11 @@ def instantiate_cube(cube):
 ########################################## MAIN EXECUTION ##########################################
 
 
+logger = boablend.util.Logger()
+
 # Camera Setup
+
+logger.dump(rgb_cube_tower_camera_settings)
 
 # New instance of boablend.Camera with the specified settings:
 main_camera = boablend.camera.Camera(bpy, cam=rgb_cube_tower_camera_settings)
@@ -159,7 +170,9 @@ main_camera.apply_camera()
 #main_camera.get_camera()
 
 # Log the camera settings currently stored in this instance to the console:
-main_camera.log_camera()
+#main_camera.log_camera()
+
+main_camera.sys_path_context__camera()
 
 
 # Tower Construction
