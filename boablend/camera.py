@@ -5,30 +5,13 @@
 ####################################################################################################
 
 ####################################################################################################
-#import bpy  # This import is not needed under the current execution model and it will not currently
-# work because we do not yet have an external bpy build in the boablend environment.
-# The import of bpy of course DOES work when we are in the execution context of a running Blender
-# instance and an executing Text object script in an open blend file and in the case of boablen,
-# when execution begins within the boablend Blender hook code. However, extra steps are needed in
-# order to make 'import bpy' work for external execution as well as to make it recognized by the
-# IDE as a valid import when the IDE has the boablend .venv Python virtual environment activated.
-# *** To install bpy requires compilation and this is currently failing. When the bpy build and
-# python module install is working, then we can make 'import bpy' work for external execution and
-# for the VSCode/IDE code inspection features.
-# The build failure cmake error is detailed here:
-# /docs/bpy_build_cmake_error.txt
-# See also some comments in init.sh for more information on the bpy build
-# failure. This does not prevent the use of boablend within Blender, but it would be nice to fix
-# this abd be able to initiate execution from Python/boablend code, independent of the Blender GUI.
-# Of course this is possible with many options for the GUI or even windoless rendering etc., and
-# capabilities in these areas will evolve as boablend does.
+import bpy  # This import works when executing within Blender but will show an import error in IDEs.
+# Regarding import errors showing in your IDE for 'import bpy':
+# /docs/import_bpy_error_in_ide.txt
 ####################################################################################################
 
 import sys
 import pprint
-
-# Test import:
-import boablend.util
 
 import boablend.constants as CONST
 
@@ -58,8 +41,7 @@ default_camera = {
 
 
 class Camera:
-    def __init__(self, bpy, cam=default_camera):
-        self.bpy = bpy
+    def __init__(self, cam=default_camera):
         self.cam = cam
 # Attribute/key names in the cam dictionary are identical to Blender internal references to the same
 # data, except for the following which were given custom symbols for brevity and clarity.
@@ -80,7 +62,7 @@ class Camera:
 
 
     def apply_camera(self):
-        scene = self.bpy.data.scenes["Scene"]
+        scene = bpy.data.scenes["Scene"]
 
         # Camera Location
         scene.camera.location.x = self.cam['scene.camera.location.x']
@@ -106,7 +88,7 @@ class Camera:
         dictionary of camera attributes. Does not cover all possible camera attributes,
         just the ones which Boablend currently deals with."""
 
-        obj = self.bpy.data.objects['Camera']  # bpy.types.Camera
+        obj = bpy.data.objects['Camera']  # bpy.types.Camera
         self.cam['name'] = 'Main Camera'
         self.cam['comment'] = 'from boablend.Camera.get_camera'
 
@@ -125,7 +107,7 @@ class Camera:
         self.cam['rot_eul1y_deg'] = obj.rotation_euler[1]*CONST.EUL_TO_DEG_FACTOR
         self.cam['rot_eul2z_deg'] = obj.rotation_euler[2]*CONST.EUL_TO_DEG_FACTOR
 
-        scene = self.bpy.data.scenes["Scene"]
+        scene = bpy.data.scenes["Scene"]
 
         # Render Resolution / Aspect Ratio
         self.cam['render_resolution_x'] = scene.render.resolution_x

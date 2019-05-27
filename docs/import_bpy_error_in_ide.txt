@@ -1,0 +1,34 @@
+
+Regarding:
+'import bpy' showing and error in IDE, but works when boablend running via Blender blend file.
+
+
+####################################################################################################
+
+
+'import bpy'
+This import is not needed under the current execution model and it will not currently
+work because we do not yet have an external bpy build in the boablend environment.
+The import of bpy of course DOES work when we are in the execution context of a running Blender
+instance and an executing Text object script in an open blend file and in the case of boablen,
+when execution begins within the boablend Blender hook code. However, extra steps are needed in
+order to make 'import bpy' work for external execution as well as to make it recognized by the
+IDE as a valid import when the IDE has the boablend .venv Python virtual environment activated.
+
+*** To install bpy requires compilation and this is currently failing. When the bpy build and
+python module install is working, then we can make 'import bpy' work for external execution and
+for the VSCode/IDE code inspection features.
+The build failure cmake error is detailed here:
+/docs/bpy_build_cmake_error.txt
+See also some comments in init.sh for more information on the bpy build
+failure. This does not prevent the use of boablend within Blender, but it would be nice to fix
+this abd be able to initiate execution from Python/boablend code, independent of the Blender GUI.
+Of course this is possible with many options for the GUI or even windoless rendering etc., and
+capabilities in these areas will evolve as boablend does.
+
+
+####################################################################################################
+
+
+##
+#

@@ -5,10 +5,11 @@
 # BOA: rgb_cube_tower
 ####################################################################################################
 
-# This 'import bpy' will show as broken in the IDE if bpy is not installed in the external
-# environment, however since this script is invoked via exec() from within the Blender internal
-# Python environment, it will be imported successfully there.
-import bpy
+####################################################################################################
+import bpy  # This import works when executing within Blender but will show an import error in IDEs.
+# Regarding import errors showing in your IDE for 'import bpy':
+# /docs/import_bpy_error_in_ide.txt
+####################################################################################################
 
 import sys
 import os
@@ -194,7 +195,7 @@ logger = boablend.util.Logger()
 logger.dump(rgb_cube_tower_camera_settings)
 
 # New instance of boablend.Camera with the specified settings:
-main_camera = boablend.camera.Camera(bpy, cam=rgb_cube_tower_camera_settings)
+main_camera = boablend.camera.Camera(cam=rgb_cube_tower_camera_settings)
 
 # Apply the camera settings currently stored in this instance to the current blend file:
 main_camera.apply_camera()
