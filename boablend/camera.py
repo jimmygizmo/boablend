@@ -1,21 +1,28 @@
 #! /usr/bin/env python3
 ####################################################################################################
 # This module code is not meant to be executed, but the shebang is here to support issuing a warning
-# through the __main__ block at the end of the file if direct execution is attempted.
+# through the __main__ block at the end of the file if direct execution occurs.
+####################################################################################################
 
 ####################################################################################################
 #import bpy  # This import is not needed under the current execution model and it will not currently
 # work because we do not yet have an external bpy build in the boablend environment.
-#
-# The import of bpy of course DOES work within Blender and when execution begins within the boablend
-# Blender hook code. However, extra steps are needed in order to make it work for external execution
-# as well as to make it recognized by the IDE as a valid import. To install bpy requires compilation
-# and this is currently failing. When the bpy build and python module install is working, then we
-# can make 'import bpy' work for external execution and for the VSCode/IDE code inspection features.
-# See the build error log in this repo and comments in init.sh for more information on the bpy build
-# failure. This does not prevent the use of boablend within Blender, but it would be nice to fix for
-# a more complete and full-featured project.
-
+# The import of bpy of course DOES work when we are in the execution context of a running Blender
+# instance and an executing Text object script in an open blend file and in the case of boablen,
+# when execution begins within the boablend Blender hook code. However, extra steps are needed in
+# order to make 'import bpy' work for external execution as well as to make it recognized by the
+# IDE as a valid import when the IDE has the boablend .venv Python virtual environment activated.
+# *** To install bpy requires compilation and this is currently failing. When the bpy build and
+# python module install is working, then we can make 'import bpy' work for external execution and
+# for the VSCode/IDE code inspection features.
+# The build failure cmake error is detailed here:
+# /docs/bpy_build_cmake_error.txt
+# See also some comments in init.sh for more information on the bpy build
+# failure. This does not prevent the use of boablend within Blender, but it would be nice to fix
+# this abd be able to initiate execution from Python/boablend code, independent of the Blender GUI.
+# Of course this is possible with many options for the GUI or even windoless rendering etc., and
+# capabilities in these areas will evolve as boablend does.
+####################################################################################################
 
 import sys
 import pprint
@@ -23,11 +30,7 @@ import pprint
 # Test import:
 import boablend.util
 
-from boablend.constants import *  # Ignore IDE warning that this is unused. This type of
-# import is not normally recommended but is ok for just importing a namespace of very uniquely
-# named and special purpose constants and where there is not a practice of defining similar
-# constants in other files.
-
+import boablend.constants as CONST
 
 # These default_camera settings are stored in a new Camera instance when no such settings are
 # supplied to the Camera constructor. These settings are not particularly useful since they
@@ -86,12 +89,12 @@ class Camera:
 
         # Camera Rotation - Degrees - Rotation Mode: 'XYZ Euler'/'XYZ'
         scene.camera.rotation_mode = 'XYZ'
-        scene.camera.rotation_euler[0] = self.cam['rot_eul0x_deg']*DEG_TO_EUL_FACTOR
-        scene.camera.rotation_euler[1] = self.cam['rot_eul1y_deg']*DEG_TO_EUL_FACTOR
-        scene.camera.rotation_euler[2] = self.cam['rot_eul2z_deg']*DEG_TO_EUL_FACTOR
+        scene.camera.rotation_euler[0] = self.cam['rot_eul0x_deg']*CONST.DEG_TO_EUL_FACTOR
+        scene.camera.rotation_euler[1] = self.cam['rot_eul1y_deg']*CONST.DEG_TO_EUL_FACTOR
+        scene.camera.rotation_euler[2] = self.cam['rot_eul2z_deg']*CONST.DEG_TO_EUL_FACTOR
 
         # Camera FOV - Degrees
-        scene.camera.data.angle = self.cam['scene.camera.data.angle']*DEG_TO_EUL_FACTOR
+        scene.camera.data.angle = self.cam['scene.camera.data.angle']*CONST.DEG_TO_EUL_FACTOR
 
         # Render Resolution / Aspect Ratio
         scene.render.resolution_x = self.cam['render_resolution_x']
@@ -111,15 +114,16 @@ class Camera:
         # NOTE: We had to make these obj.location.* into str() to print them
         # but it is most likely that we do not need to do anything like that to
         # store or use them to set a camera. Just making a note on this.
+        # TODO: Clarify this situation by showing the TYPEOF these and document it:
         self.cam['scene.camera.location.x'] = obj.location.x
         self.cam['scene.camera.location.y'] = obj.location.y
         self.cam['scene.camera.location.z'] = obj.location.z
 
         # Camera Rotation - Degrees - Rotation Mode: 'XYZ Euler'/'XYZ'
         # Obtained as Euler values, Stored as Degrees.
-        self.cam['rot_eul0x_deg'] = obj.rotation_euler[0]*EUL_TO_DEG_FACTOR
-        self.cam['rot_eul1y_deg'] = obj.rotation_euler[1]*EUL_TO_DEG_FACTOR
-        self.cam['rot_eul2z_deg'] = obj.rotation_euler[2]*EUL_TO_DEG_FACTOR
+        self.cam['rot_eul0x_deg'] = obj.rotation_euler[0]*CONST.EUL_TO_DEG_FACTOR
+        self.cam['rot_eul1y_deg'] = obj.rotation_euler[1]*CONST.EUL_TO_DEG_FACTOR
+        self.cam['rot_eul2z_deg'] = obj.rotation_euler[2]*CONST.EUL_TO_DEG_FACTOR
 
         scene = self.bpy.data.scenes["Scene"]
 
@@ -128,7 +132,7 @@ class Camera:
         self.cam['render_resolution_y'] = scene.render.resolution_y
 
         # Camera FOV - Obtained as Euler values, Stored as Degrees.
-        self.cam['scene.camera.data.angle'] = scene.camera.data.angle*EUL_TO_DEG_FACTOR
+        self.cam['scene.camera.data.angle'] = scene.camera.data.angle*CONST.EUL_TO_DEG_FACTOR
 
         return self.cam
 

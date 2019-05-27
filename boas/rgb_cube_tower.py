@@ -1,6 +1,9 @@
-
+# No shebang. Boa files are currently only supported for direct execution from withing the Python
+# environment of a currently-running Blender instance and open blend file with a Text object
+# containing the boablend hook code. You cannot currently run Boas from a standard Python env.
 ####################################################################################################
 # BOA: rgb_cube_tower
+####################################################################################################
 
 # This 'import bpy' will show as broken in the IDE if bpy is not installed in the external
 # environment, however since this script is invoked via exec() from within the Blender internal
@@ -10,10 +13,6 @@ import bpy
 import sys
 import os
 
-from boablend.constants import *  # Ignore IDE warning that this is unused. This type of
-# import is not normally recommended but is ok for just importing a namespace of very uniquely
-# named and special purpose constants and where there is not a practice of defining similar
-# constants in other files.
 
 # TODO: If and when we can execute things outside of Blender, we can improve things a lot and
 # eliminate the need for any path hacks by using 'pip install -e .' The -e option of pip install
@@ -48,9 +47,12 @@ from boablend.constants import *  # Ignore IDE warning that this is unused. This
 dir = os.path.dirname(bpy.data.filepath)
 if not dir in sys.path:
     sys.path.append(dir)
+
 import boablend
 import boablend.camera
 import boablend.util
+import boablend.constants as CONST
+
 # Importlib's reload() is used to ensure that every time this project is executed, any Boablend code
 # changes will be picked up. This is necessary in the case that the Blender file containing the
 # Boablend hook has not been restarted because Blender's Python environment internally caches
@@ -59,6 +61,8 @@ import importlib
 importlib.reload(boablend)
 importlib.reload(boablend.camera)
 importlib.reload(boablend.util)
+importlib.reload(boablend.constants)
+importlib.reload(CONST)
 ####################################################################################################
 
 
@@ -164,10 +168,7 @@ def instantiate_cube(cube):
                   '_' + str(cube['color_y']) + \
                   '_' + str(cube['color_z'])
     mat = bpy.data.materials.new(name=mat_name)
-    # TODO: FIX 2.79 vs. 2.80b ISSUE. SETTING mat.diffuse_color NOW APPEARS TO TAKE 4 NOT 3 ARGS.
-    mat.diffuse_color = (cube['color_x'], cube['color_y'], cube['color_z'], ALPHA_FULL_OPAQUE)
-    # ERROR IN: mat.diffuse_color = (cube['color_x'], cube['color_y'], cube['color_z'])
-    # ERROR: ValueError: bpy_struct: item.attr = val: sequences of dimension 0 should contain 4 items, not 3
+    mat.diffuse_color = (cube['color_x'], cube['color_y'], cube['color_z'], CONST.ALPHA_FULL_OPAQUE)
 
     bpy.ops.object.mode_set(mode='OBJECT')  # Can't assign materials in editmode. Enter object mode.
 
@@ -183,6 +184,9 @@ logger = boablend.util.Logger()
 
 # First before changing any camera settings and for illustrative purposes, let's retrieve the
 # current camera settings and dump them to the log.
+
+# NOTE: Related to how I was restructuring things here (partially just for illustrative purposes,)
+# I need to introduce a camera.set_camera() See comments in boablend.camera for more info.
 
 # Read the camera settings in the current blend file and store them in this instance.
 #main_camera.get_camera()

@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 ####################################################################################################
 # This module code is not meant to be executed, but the shebang is here to support issuing a warning
-# through the __main__ block at the end of the file if direct execution is attempted.
+# through the __main__ block at the end of the file if direct execution occurs.
+####################################################################################################
 
 import sys
 
