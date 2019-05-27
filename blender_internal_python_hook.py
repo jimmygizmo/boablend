@@ -1,6 +1,6 @@
-# No shebang. Boa files are currently only supported for direct execution from withing the Python
+# No shebang. This file is currently only supported for direct execution from withing the Python
 # environment of a currently-running Blender instance and open blend file with a Text object
-# containing the boablend hook code. You cannot currently run Boas from a standard Python env.
+# containing the boablend hook code. You cannot currently run this from a standard Python env.
 ####################################################################################################
 ########################################## BOABLEND HOOK ###########################################
 # boablend_hook_version = '2019-005'
@@ -21,6 +21,8 @@ import bpy  # This import works when executing within Blender but will show an i
 # Regarding import errors showing in your IDE for 'import bpy':
 # /docs/import_bpy_error_in_ide.txt
 ####################################################################################################
+
+import os
 
 
 # Set verbose to True to print status and diagnostic info to STDOUT.
@@ -49,14 +51,9 @@ if verbose:
     print()
     print("~~~~~~~~~~~~~~~~~~~~ Boablend starting.")
 
-# Current working directory is not so relevant here. It appears (at least on MacOS) to be the
-# user's home directory of the user running Blender and so is not relevant to the current
-# blend file, which is the reference point we currently use in how boablend is imported and
-# executed. So we won't log it anymore from here.
-# import os
-# current_working_directory = os.getcwd()
-# print("Blender file current working directory: ")
-# print(current_working_directory)
+current_working_directory = os.getcwd()
+print("Blender file current working directory: ")
+print(current_working_directory)
 
 if verbose:
     print("Boablend entry point filename: {}".\
