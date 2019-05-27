@@ -11,8 +11,6 @@ import bpy  # This import works when executing within Blender but will show an i
 ####################################################################################################
 
 import sys
-import pprint
-
 import boablend.constants as CONST
 
 # These default_camera settings are stored in a new Camera instance when no such settings are
@@ -41,27 +39,36 @@ default_camera = {
 
 
 class Camera:
+    """The boablend.Camera class stores, obtains, applies and generally manipulates camera settings.
+    Only the subset of Blender camera attributes which Boablend deals with are handled."""
     def __init__(self, cam=default_camera):
         self.cam = cam
-# Attribute/key names in the cam dictionary are identical to Blender internal references to the same
-# data, except for the following which were given custom symbols for brevity and clarity.
-# 'rot_eul0x_deg' is the symbol for 'scene.camera.rotation_euler[0] in degrees'  # X
-# 'rot_eul1y_deg' is the symbol for 'scene.camera.rotation_euler[1] in degrees'  # Y
-# 'rot_eul2z_deg' is the symbol for 'scene.camera.rotation_euler[2] in degrees'  # Z
+    # Attribute/key names in the cam dictionary are identical to Blender internal references to the
+    # same data, except for the following which were given custom symbols for brevity and clarity.
+    # 'rot_eul0x_deg' is the symbol for 'scene.camera.rotation_euler[0] in degrees'  # X
+    # 'rot_eul1y_deg' is the symbol for 'scene.camera.rotation_euler[1] in degrees'  # Y
+    # 'rot_eul2z_deg' is the symbol for 'scene.camera.rotation_euler[2] in degrees'  # Z
 
-    # TODO:
-        # Add a set_camera_method, because we could also choose to create the instance with some
-        # other settings or even no settings (taking the default) and then want to set this instance
-        # to something else and then to apply it. It could be argued whether or not apply should be
-        # a separate action but we will leave it like that for now.
-    def set_camera(self, cam):
-        # ENFORCE: cam must be supplied and we should enforce the exact type of dictionary with the
-        # exact specified keys. We need to look at how we could enforce just the format, but allow
-        # the absence in the __init__ since that is the mode to get the built in default.
-        pass
+    # TODO: Consider using @property and more standardized accessors. We might also make a parent
+    # class perhaps called Entity and define generic accessors in a pythonic way and always use a
+    # single 'props' dictionary to hold whatever properties a specific kind of object needs.
+    # If every object/entity boablend deals with will have a generic getter and setter for a generic
+    # props dictionary then this would makes sense. Still carefully considering the design patterns
+    # in this area.
+    
+
+    def store(self, cam):
+        """The store() method takes a camera settings dictionary and stores those settings in the
+        current instance. Settings are not applied to an actual camera. Use the apply() method to
+        cause the settings to take effect on the Blender main camera."""
+
+        self.cam = cam
 
 
-    def apply_camera(self):
+    def write(self):
+        """The write() method applies the camera settings currently stored in the instance to the
+        Blender main camera at which point they take effect."""
+
         scene = bpy.data.scenes["Scene"]
 
         # Camera Location
@@ -83,10 +90,10 @@ class Camera:
         scene.render.resolution_y = self.cam['render_resolution_y']
 
 
-    def get_camera(self):
-        """Obtains current main camera settings from the active blend file and returns a 
-        dictionary of camera attributes. Does not cover all possible camera attributes,
-        just the ones which Boablend currently deals with."""
+    def read(self):
+        """The read() method obtains the current main camera settings from the active blend file,
+        stores those settings in the boablend camera instance and returns a camera settings
+        dictionary."""
 
         obj = bpy.data.objects['Camera']  # bpy.types.Camera
         self.cam['name'] = 'Main Camera'
@@ -115,6 +122,13 @@ class Camera:
 
         # Camera FOV - Obtained as Euler values, Stored as Degrees.
         self.cam['scene.camera.data.angle'] = scene.camera.data.angle*CONST.EUL_TO_DEG_FACTOR
+
+        return self.cam
+
+
+    def get(self):
+        """The get() method returns the camera settings dictionary currently stored in the
+        instance."""
 
         return self.cam
 

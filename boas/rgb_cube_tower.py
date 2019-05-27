@@ -186,11 +186,8 @@ logger = boablend.util.Logger()
 # First before changing any camera settings and for illustrative purposes, let's retrieve the
 # current camera settings and dump them to the log.
 
-# NOTE: Related to how I was restructuring things here (partially just for illustrative purposes,)
-# I need to introduce a camera.set_camera() See comments in boablend.camera for more info.
-
-# Read the camera settings in the current blend file and store them in this instance.
-#main_camera.get_camera()
+# Read the active camera settings in the current blend file and store them in this instance.
+#main_camera.read()
 
 logger.dump(rgb_cube_tower_camera_settings)
 
@@ -198,10 +195,7 @@ logger.dump(rgb_cube_tower_camera_settings)
 main_camera = boablend.camera.Camera(cam=rgb_cube_tower_camera_settings)
 
 # Apply the camera settings currently stored in this instance to the current blend file:
-main_camera.apply_camera()
-
-# Log the camera settings currently stored in this instance to the console:
-#main_camera.log_camera()
+main_camera.write()
 
 logger.dump_environment_info()
 
