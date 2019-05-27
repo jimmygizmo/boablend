@@ -1,22 +1,32 @@
-
+# No shebang. Boa files are currently only supported for direct execution from withing the Python
+# environment of a currently-running Blender instance and open blend file with a Text object
+# containing the boablend hook code. You cannot currently run Boas from a standard Python env.
 ####################################################################################################
 ########################################## BOABLEND HOOK ###########################################
-# boablend_hook_version = '2019-004'
+# boablend_hook_version = '2019-005'
 ####################################################################################################
 # Install all of the code in this file into a Text Object within Blender.
 # It is recommended to name this Text Object 'boablend_hook'.
 # Click 'Run Script' on this Text Object or perform an equivalent action to run the current Boablend
-# project configuration. Other modes of execution may be available in the future.
+# project configuration. Other modes of execution may be available in the future. Dispatching of
+# different/specific Boa files occurs in boablend_start.py. This hook code should remain as generic
+# and simple as possible.
+# Hook code  will likely always be a very small amount of code. If any changes are ever needed to
+# the hook code or if it is updated along with this project, you will need to manually (cut/paste)
+# the updated hook code back into the blend file Text object.
 ####################################################################################################
 
-import bpy  # See comments below about bpy import errors showning in your IDE.
+####################################################################################################
+import bpy  # This import works when executing within Blender but will show an import error in IDEs.
+# Regarding import errors showing in your IDE for 'import bpy':
+# /docs/import_bpy_error_in_ide.txt
+####################################################################################################
 
 
 # Set verbose to True to print status and diagnostic info to STDOUT.
 # This flag only affects output from this hook code.
 verbose = True
 
-####################################################################################################
 
 ################################ BOABLEND ENTRY POINT CONFIGURATION ################################
 # The executable python file which imports most of this project's dependencies and runs the main
@@ -26,29 +36,13 @@ verbose = True
 #
 # TODO: Implement a dispatch mechanism in the entry point code so that some externalized and
 # and configurable switching mechanism will select which project-specific code to execute. A naming
-# convention is needed here. 'Projects' is the most immediate and simple concept, leading to:
-# 'bloablend project'. The nomenclature will be under consideration until this starts getting
-# implemented shortly. An obvious concept here is to have only generic code in the entry point as
-# well as to enble important usability features.
+# convention is needed here.
 
 # The following path must be expressed:
 # RELATIVE TO THE CURRENT BLEND FILE CONTAINING THIS HOOK CODE.
 boablend_entry_point = 'boablend_start.py'
 
 ####################################################################################################
-
-# NOTE: IDE Indication of bpy import errors:
-# Since bpy is imported here within Blenders internal Python environment, we do not need to import
-# bpy in the external python code, and that's not currently possible with the setup this project
-# currently is using anyhow. This project is setup to use the VSCode (or Atom, IDEA CE, or a
-# similar) IDE to edit all of the source code. Under the current setup bpy is not yet installed
-# externally due to compilation errors in the first pass installation attempt, and so any
-# 'import bpy' statements done in external python files will show an error in the IDE.
-#
-# A small piece of hook code resides in the blender file, but this will likely always be a very
-# small amount of code. If any changes are ever needed to the hook code or if it is updated along
-# with this project, you will need to manually (cut/paste) the updated hook code back into the
-# blend file Text object.
 
 
 if verbose:

@@ -26,6 +26,15 @@ this abd be able to initiate execution from Python/boablend code, independent of
 Of course this is possible with many options for the GUI or even windoless rendering etc., and
 capabilities in these areas will evolve as boablend does.
 
+More related comments moved from code to this file:
+TODO: Rewrite and consolidate this info with the above.
+Since bpy is imported here within Blenders internal Python environment, we do not need to import
+bpy in the external python code, and that's not currently possible with the setup this project
+currently is using anyhow. This project is setup to use the VSCode (or Atom, IDEA CE, or a
+similar) IDE to edit all of the source code. Under the current setup bpy is not yet installed
+externally due to compilation errors in the first pass installation attempt, and so any
+'import bpy' statements done in external python files will show an error in the IDE.
+
 
 ####################################################################################################
 

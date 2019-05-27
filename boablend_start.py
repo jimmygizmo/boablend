@@ -1,14 +1,14 @@
-
+# No shebang. Boa files are currently only supported for direct execution from withing the Python
+# environment of a currently-running Blender instance and open blend file with a Text object
+# containing the boablend hook code. You cannot currently run Boas from a standard Python env.
 ####################################################################################################
 ####################################### BOABLEND ENTRY POINT #######################################
 
-# This is the new DISPATCHING implementation of the boablend entry point.
-# Just introduced the concept of 'boas'.
-
-# This 'import bpy' will show as broken in the IDE if bpy is not installed in the external
-# environment, however since this script is invoked via exec() from within the Blender internal
-# Python environment, it will be imported successfully there.
-#import bpy
+####################################################################################################
+import bpy  # This import works when executing within Blender but will show an import error in IDEs.
+# Regarding import errors showing in your IDE for 'import bpy':
+# /docs/import_bpy_error_in_ide.txt
+####################################################################################################
 
 import os
 
