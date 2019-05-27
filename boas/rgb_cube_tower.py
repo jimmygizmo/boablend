@@ -49,21 +49,21 @@ dir = os.path.dirname(bpy.data.filepath)
 if not dir in sys.path:
     sys.path.append(dir)
 
-import boablend
+#import boablend  # boablend/__init__ does nothing currently so can we leave this import out?
 import boablend.camera
 import boablend.util
 import boablend.constants as CONST
 
 # Importlib's reload() is used to ensure that every time this project is executed, any Boablend code
-# changes will be picked up. This is necessary in the case that the Blender file containing the
-# Boablend hook has not been restarted because Blender's Python environment internally caches
-# imported modules and this cache persists while the blend file is open.
+# changes will be picked up. This is necessary in the case that the Blender blend file containing
+# the Boablend hook has not been restarted because Blender's Python environment internally caches
+# imported modules and this cache persists while the blend file is open. You can reload any module
+# by its full/absolute/canonical name format OR by its 'as' alias. Either one works.
 import importlib
 importlib.reload(boablend)
 importlib.reload(boablend.camera)
 importlib.reload(boablend.util)
-importlib.reload(boablend.constants)
-importlib.reload(CONST)
+importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
 ####################################################################################################
 
 
