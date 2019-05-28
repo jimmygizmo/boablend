@@ -55,9 +55,6 @@ rgb_cube_tower_camera_settings = {
     'render_resolution_y': 480,
     'scene.camera.data.angle': 88.22523942116491
 }
-# 'rot_eul0x_deg' is the symbol for 'scene.camera.rotation_euler[0] in degrees'  # X
-# 'rot_eul1y_deg' is the symbol for 'scene.camera.rotation_euler[1] in degrees'  # Y
-# 'rot_eul2z_deg' is the symbol for 'scene.camera.rotation_euler[2] in degrees'  # Z
 
 
 # Tower/Cube Settings
@@ -126,9 +123,6 @@ logger.dump_environment_info()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Deselect the main camera so that it will not also be deleted when we delete the default cube.
-#bpy.data.objects['Camera'].select_set(False)
-
 # Select and then delete the default cube.
 bpy.data.objects['Cube'].select_set(True)
 bpy.ops.object.delete()  # This will delete all selected objects, so make sure of what is selected.
@@ -137,13 +131,18 @@ bpy.ops.object.delete()  # This will delete all selected objects, so make sure o
 
 # Camera Setup for this project. Settings will provide the optimal framing of the tower animation.
 
-# New instance of boablend.Camera with default settings:
+# New instance of boablend.Camera with default boablend settings:
 main_camera = boablend.camera.Camera()
 # Optionally, we could apply desired settings at the time of intantiation:
 #main_camera = boablend.camera.Camera(cam=rgb_cube_tower_camera_settings)
 
+# Note that the boablend default camera settings are not the same as Blender's.
+# Right now we have boablend's stored in the instance but next we will retreive Blender's.
+# If we wanted to look at boablend's default settings, we could use main_camera.get().
+# But what we will do next is main_camera.read(), which retrieves and stores Blender's settings.
+
 # First before changing any camera settings and for illustrative purposes, let's retrieve the
-# current (default) camera settings and dump them to the log.
+# current (default) camera settings from the blend file and dump them to the log.
 # Read the active camera settings in the current blend file and store them in this instance.
 # The camera.read() method also returns the settings/attributes dictionary.
 initial_default_camera_settings = main_camera.read()
@@ -210,9 +209,16 @@ for a in range(0, cubes_z_height):
 
 ####################################################################################################
 # Remaining Manual Steps Requiring Automation
+# The following steps are also required to build and render a complete animation as seen in the
+# linked YouTube video.
 #
 # Most or all settings detailed below were the ones used for the demo YouTube video rendering:
 # https://www.youtube.com/watch?v=1j7_nHfTeaw
+
+# RGB Cube Tower is inspired by a tutorial video by 'Olav3D Tutorials':
+# https://www.youtube.com/watch?v=KI0tjZUkb5A
+# Watch this video to see the entirety of manual steps required to make a physics simulation and
+# animation like this.
 
 # - - - - - - - - - -
 

@@ -1,0 +1,9 @@
+
+
+RGB Cube Tower is inspired by a tutorial video by 'Olav3D Tutorials':
+https://www.youtube.com/watch?v=KI0tjZUkb5A
+Watch this video to see the entirety of manual steps required to make a physics simulation and
+animation like this.
+
+##
+#
