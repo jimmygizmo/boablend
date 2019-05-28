@@ -1,8 +1,3 @@
-#! /usr/bin/env python3
-####################################################################################################
-# This module code is not meant to be executed, but the shebang is here to support issuing a warning
-# through the __main__ block at the end of the file if direct execution occurs.
-####################################################################################################
 
 ####################################################################################################
 import bpy  # This import works when executing within Blender but will show an import error in IDEs.
@@ -10,7 +5,6 @@ import bpy  # This import works when executing within Blender but will show an i
 # /docs/import_bpy_error_in_ide.txt
 ####################################################################################################
 
-import sys
 import boablend.constants as CONST
 
 # Cube dimensions
@@ -98,15 +92,6 @@ class Cube:
         instance."""
 
         return self.cube
-
-
-########################################## MAIN EXECUTION ##########################################
-# This module and this file are only intended to be imported for use, not directly executed.
-
-
-if __name__ == '__main__':
-    sys.exit("This file [{}] is part of the boablend module which is meant to be imported, "
-             "not executed directly.".format(__file__))
 
 
 ##

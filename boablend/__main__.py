@@ -10,8 +10,7 @@ import sys
 ####################################################################################################
 # This file is only here in case an attempt is made to execute this module directly
 # via "python3 -m boablend" or "python3 path_to_boablend".
-# This helps guide the user to proper usage. There is a small piece of similar code in the standard
-# "if __name__ == '__main__'" section of all module code files.
+# This helps guide the user to proper usage.
 ####################################################################################################
 
 sys.exit('The boablend module is meant to be imported only, not executed.')

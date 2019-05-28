@@ -1,6 +1,4 @@
-# No shebang. Boa files are currently only supported for direct execution from withing the Python
-# environment of a currently-running Blender instance and open blend file with a Text object
-# containing the boablend hook code. You cannot currently run Boas from a standard Python env.
+
 ####################################################################################################
 # BOA: rgb_cube_tower
 ####################################################################################################
@@ -8,14 +6,12 @@
 ####################################################################################################
 import bpy  # This import works when executing within Blender but will show an import error in IDEs.
 # Regarding import errors showing in your IDE for 'import bpy':
-# /docs/import_bpy_error_in_ide.txt
+# See: /docs/import_bpy_error_in_ide.txt
 ####################################################################################################
 
 import sys
 import os
 
-# The following sys.path hack is required to enable boablend module imports because of the unique
-# nature of the current Blender execution model and project structure used by Boablend.
 # See: /docs/sys_path_hack_in_boa_files.txt
 dir = os.path.dirname(bpy.data.filepath)
 if not dir in sys.path:
@@ -26,12 +22,14 @@ import boablend.util
 import boablend.constants as CONST
 import boablend.primitives.cube
 
+# See: /docs/use_of_importlib_reload.txt
 import importlib
 importlib.reload(boablend)
 importlib.reload(boablend.camera)
 importlib.reload(boablend.util)
 importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
 importlib.reload(boablend.primitives.cube)
+
 ####################################################################################################
 
 
@@ -140,10 +138,10 @@ main_camera.write()
 logger.dump_environment_info()
 
 cube_maker = boablend.primitives.cube.Cube(cube=rgb_tower_cube_template)
-# TODO: primitives.Cube does not currently have accessors for individual cube attributes, so
+# TODO: primitives.cube.Cube does not currently have accessors for individual cube attributes, so
 # below you will see direct access to the cube dictionary in the instance. Currently I am
 # considering various design patters to use in boablend where one of the challenges is having a
-# high number of attributes for most Blender objects. Of course direct access is always possible
+# high number of attributes for most Blender objects. Of course direct access is usually possible
 # in Python, although not always desireable. One approach may be to provide accessors (or even
 # just setters) for only the most commonly used attributes, such as position and color values as
 # in the case of the current Boa.
