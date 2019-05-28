@@ -1,0 +1,36 @@
+
+TODO: These are comments/notes from cut from code. Rewrite in to proper documentation.
+
+TODO: If and when we can execute things outside of Blender, we can improve things a lot and
+eliminate the need for any path hacks by using 'pip install -e .' The -e option of pip install
+in this local install context will perform the module install using symlinks and then we can
+develop the module in its repository location and the .venv will immediately reflect the changes.
+setup.py will need to be in the correct format.
+
+Since we are currently only executing from within Blender, we will still need to use the
+following path hack.
+
+####################################################################################################
+Add the current directory of the current blend file to the list of directories Python will search
+to find modules for importing. In the current format, this project is only executed from within
+Blender using the built-in Python environment. Importing of Boablend from the current
+project/repository directory is enabled in this manner so that the Boablend module does not need
+to be installed within Blender's python envirnoment. This configuration may change in the future
+as there are a few other execution/module-installation configurations under consideration.
+ADDITIONALLY:
+It may be obvious from some perspectives, but also it is possible to prove the folowing statement
+by displaying sys.path in various test configurations, but it may be important to note and to
+advise developers/users of boablend that the following path manilulation (path hack) must be
+be done in the boa file .. or possibly and maybe even preferably in the boablend_start file or
+perhaps even better in the boablend_hook code .. but must not be attempted in any of the module
+files or sub-module files of the library itself. Those module files are imported and we need the
+path manipulation to be done in the EXECUTING context .. the MAIN code so to speak, not
+in imported files (when you wamt to import another baoblend module for example) as sys.path may
+not be the same in that context. (Or it might be .. but this would still be messy and confusing
+even if it works.)
+And this loading and then reloading should probably be done immediately after as well.
+TODO: Do a trial move of this code to either boablend_hook or boablend_start. Might be a better home.
+Use the diagnostic sys.path display methods.
+
+##
+#

@@ -1,0 +1,26 @@
+
+Boa files use importlibs reload.
+
+Importlib's reload() is used to ensure that every time this project is executed, any Boablend code
+changes will be picked up. This is necessary in the case that the Blender blend file containing
+the Boablend hook has not been restarted because Blender's Python environment internally caches
+imported modules and this cache persists while the blend file is open. You can reload any module
+by its full/absolute/canonical name format OR by its 'as' alias. Either one works.
+
+
+######################################################################################################
+
+
+We use an alias with the import of boablend.constants:
+
+import boablend.constants as CONST
+
+So the question arose, to use importlib.reload(), do we reload boablend.constants or do we
+reload CONST? Does it matter. Tests were done. Either way works equally well.
+Either format can be used:
+importlib.reload(boablend.constants)
+importlib.reload(CONST)
+
+
+##
+#

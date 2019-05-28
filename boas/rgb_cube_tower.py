@@ -14,52 +14,18 @@ import bpy  # This import works when executing within Blender but will show an i
 import sys
 import os
 
-
-# TODO: If and when we can execute things outside of Blender, we can improve things a lot and
-# eliminate the need for any path hacks by using 'pip install -e .' The -e option of pip install
-# in this local install context will perform the module install using symlinks and then we can
-# develop the module in its repository location and the .venv will immediately reflect the changes.
-# setup.py will need to be in the correct format.
-
-# Since we are currently only executing from within Blender, we will still need to use the
-# following path hack.
-
-####################################################################################################
-# Add the current directory of the current blend file to the list of directories Python will search
-# to find modules for importing. In the current format, this project is only executed from within
-# Blender using the built-in Python environment. Importing of Boablend from the current
-# project/repository directory is enabled in this manner so that the Boablend module does not need
-# to be installed within Blender's python envirnoment. This configuration may change in the future
-# as there are a few other execution/module-installation configurations under consideration.
-# ADDITIONALLY:
-# It may be obvious from some perspectives, but also it is possible to prove the folowing statement
-# by displaying sys.path in various test configurations, but it may be important to note and to
-# advise developers/users of boablend that the following path manilulation (path hack) must be
-# be done in the boa file .. or possibly and maybe even preferably in the boablend_start file or
-# perhaps even better in the boablend_hook code .. but must not be attempted in any of the module
-# files or sub-module files of the library itself. Those module files are imported and we need the
-# path manipulation to be done in the EXECUTING context .. the MAIN code so to speak, not
-# in imported files (when you wamt to import another baoblend module for example) as sys.path may
-# not be the same in that context. (Or it might be .. but this would still be messy and confusing
-# even if it works.)
-# And this loading and then reloading should probably be done immediately after as well.
-# TODO: Do a trial move of this code to either boablend_hook or boablend_start. Might be a better home.
-# Use the diagnostic sys.path display methods.
+# The following sys.path hack is required to enable boablend module imports because of the unique
+# nature of the current Blender execution model and project structure used by Boablend.
+# See: /docs/sys_path_hack_in_boa_files.txt
 dir = os.path.dirname(bpy.data.filepath)
 if not dir in sys.path:
     sys.path.append(dir)
 
-#import boablend  # boablend/__init__ does nothing currently so can we leave this import out?
 import boablend.camera
 import boablend.util
 import boablend.constants as CONST
 import boablend.primitives.cube
 
-# Importlib's reload() is used to ensure that every time this project is executed, any Boablend code
-# changes will be picked up. This is necessary in the case that the Blender blend file containing
-# the Boablend hook has not been restarted because Blender's Python environment internally caches
-# imported modules and this cache persists while the blend file is open. You can reload any module
-# by its full/absolute/canonical name format OR by its 'as' alias. Either one works.
 import importlib
 importlib.reload(boablend)
 importlib.reload(boablend.camera)
@@ -148,35 +114,7 @@ rgb_tower_cube_template = {
 
 ################################## FUNCTION AND CLASS DEFINITIONS ##################################
 
-
-# def instantiate_cube(cube):
-#     # Create the mesh object.
-#     bpy.ops.mesh.primitive_cube_add(
-#         size = cube['size'],
-#         location = (cube['xloc'], cube['yloc'], cube['zloc'])
-#     )
-
-#     # Add and adjust the physics.
-#     bpy.ops.rigidbody.object_add()
-#     obj = bpy.context.object  # For more concise code.
-#     obj.rigid_body.mass = cube['mass']
-#     obj.rigid_body.collision_shape = cube['collision_shape']
-#     obj.rigid_body.friction = cube['friction']
-#     obj.rigid_body.use_margin = cube['use_margin']
-#     obj.rigid_body.collision_margin = cube['collision_margin']
-#     obj.rigid_body.linear_damping = cube['linear_damping']
-#     obj.rigid_body.angular_damping = cube['angular_damping']
-
-#     mat_name = 'mat_' + str(cube['color_x']) + \
-#                   '_' + str(cube['color_y']) + \
-#                   '_' + str(cube['color_z'])
-#     mat = bpy.data.materials.new(name=mat_name)
-#     mat.diffuse_color = (cube['color_x'], cube['color_y'], cube['color_z'], CONST.ALPHA_FULL_OPAQUE)
-
-#     bpy.ops.object.mode_set(mode='OBJECT')  # Can't assign materials in editmode. Enter object mode.
-
-#     bpy.context.object.active_material = mat
-
+# No more functions or classes live here. All have been made part of the boablend library.
 
 ########################################## MAIN EXECUTION ##########################################
 
