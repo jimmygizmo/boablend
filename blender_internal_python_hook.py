@@ -1,7 +1,4 @@
-# No shebang. This file is currently only supported for direct execution from withing the Python
-# environment of a currently-running Blender instance and open blend file with a Text object
-# containing the boablend hook code. You cannot currently run this from a standard Python env.
-####################################################################################################
+
 ########################################## BOABLEND HOOK ###########################################
 # boablend_hook_version = '2019-005'
 ####################################################################################################

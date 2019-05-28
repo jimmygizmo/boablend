@@ -30,12 +30,13 @@ importlib.reload(boablend.util)
 importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
 importlib.reload(boablend.primitives.cube)
 
+
 ####################################################################################################
 
 
 # Camera Settings
 
-# These camera settings are great for the animation of the tower falling and shattering and were
+# These camera settings are optimal for the animation of the tower falling and shattering and were
 # used for the rendering of the following YouTube video:
 # https://www.youtube.com/watch?v=1j7_nHfTeaw
 # The FOV represents a fairly wide-angle lense which helps to capture everything from the beginning
@@ -61,8 +62,9 @@ rgb_cube_tower_camera_settings = {
 
 # Tower/Cube Settings
 
-# This version now creates a custom material for each cube and maps the entire RGB color space into the
-# XYZ space based on the position/index of each cube. Pure black to pure white is fully mapped across RGB/XYZ space.
+# This version now creates a custom material for each cube and maps the entire RGB color space into
+# the XYZ space based on the position/index of each cube. Pure black to pure white is fully mapped
+# across RGB/XYZ space.
 
 # This code will be compiled and run inside Blender using the built in Python
 # interpreter which is a version 2.x interpreter.
@@ -75,22 +77,21 @@ rgb_cube_tower_camera_settings = {
 # bpy.ops.mesh.primitive_cube_add(). Obviously this is necessary to know in order
 # to perform location calculations in the main execution code.
 
-# Dimensions of the tower of cubes as number of cubes:
+# Dimensions of the tower of cubes as number of cubes.
+# The 8x8x24 dimensions are what were used in the linked YouTube video.
 # cubes_x_width = 8
 # cubes_y_depth = 8
 # cubes_z_height = 24
-# 8x8x24 takes about 10 minutes to run. for rapid dev/test iterations, using 4x4x6:
+# 8x8x24 takes about 10 minutes to run.
+#
+# For rapid dev/test iterations, 4x4x6 runs in a few seconds:
 cubes_x_width = 4
 cubes_y_depth = 4
 cubes_z_height = 6
 
 # Cube dimensions
-#cube_radius = 1
 cube_size = 2
-#cube_side_length = 2 * cube_radius
 cube_side_length = cube_size
-# Version 2.80b NOTE: Change the attribute name from 'radius' to 'size' and use cube_side_length
-# as the radius. Make sure to change the corresponding variable names for consistency.
 
 rgb_tower_cube_template = {
     'xloc': 0,
@@ -112,30 +113,61 @@ rgb_tower_cube_template = {
 
 ################################## FUNCTION AND CLASS DEFINITIONS ##################################
 
-# No more functions or classes live here. All have been made part of the boablend library.
+# No functions or classes are currently defined in this Boa file.
 
 ########################################## MAIN EXECUTION ##########################################
 
 
+# Instantiate a boablend logger instance.
 logger = boablend.util.Logger()
 
-# Camera Setup
+# Dump current environment info, just for illustrative purposes:
+logger.dump_environment_info()
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Deselect the main camera so that it will not also be deleted when we delete the default cube.
+#bpy.data.objects['Camera'].select_set(False)
+
+# Select and then delete the default cube.
+bpy.data.objects['Cube'].select_set(True)
+bpy.ops.object.delete()  # This will delete all selected objects, so make sure of what is selected.
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Camera Setup for this project. Settings will provide the optimal framing of the tower animation.
+
+# New instance of boablend.Camera with default settings:
+main_camera = boablend.camera.Camera()
+# Optionally, we could apply desired settings at the time of intantiation:
+#main_camera = boablend.camera.Camera(cam=rgb_cube_tower_camera_settings)
 
 # First before changing any camera settings and for illustrative purposes, let's retrieve the
-# current camera settings and dump them to the log.
-
+# current (default) camera settings and dump them to the log.
 # Read the active camera settings in the current blend file and store them in this instance.
-#main_camera.read()
+# The camera.read() method also returns the settings/attributes dictionary.
+initial_default_camera_settings = main_camera.read()
+logger.log('Initial/default camera settings:')
+logger.dump(initial_default_camera_settings)
 
-logger.dump(rgb_cube_tower_camera_settings)
-
-# New instance of boablend.Camera with the specified settings:
-main_camera = boablend.camera.Camera(cam=rgb_cube_tower_camera_settings)
-
-# Apply the camera settings currently stored in this instance to the current blend file:
+# Next we store the settings we will need for rgb_cube_tower into this camera instance, but note
+# that they will not be applied (written) to the blend file until we explicitly do so.
+main_camera.store(rgb_cube_tower_camera_settings)
+# Now 'write' them to the blend file, thus applied and take effect:
 main_camera.write()
+# Now, we can simply 'get' the settings back from the instance without causing anything to happen,
+# such as if we used read() .. which would take the settings from the blend file first.
+current_stored_camera_settings = main_camera.get()
+logger.log('RGB cube tower camera settings:')
+logger.dump(current_stored_camera_settings)
 
-logger.dump_environment_info()
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Instantiate a 'cube maker'.
+# In the current design and for this Boa, it makes the most sense to just re-use a single instance,
+# but in other situations, we might want a separate instance of boablend.primitives.cube.Cube for
+# each of many Cubes. These sorts of things are flexible and also the design of boablend itself is
+# still very much in flux and such concepts are being explored as boablend evolves.
 
 cube_maker = boablend.primitives.cube.Cube(cube=rgb_tower_cube_template)
 # TODO: primitives.cube.Cube does not currently have accessors for individual cube attributes, so
@@ -145,6 +177,8 @@ cube_maker = boablend.primitives.cube.Cube(cube=rgb_tower_cube_template)
 # in Python, although not always desireable. One approach may be to provide accessors (or even
 # just setters) for only the most commonly used attributes, such as position and color values as
 # in the case of the current Boa.
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Tower Construction
 

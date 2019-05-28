@@ -10,7 +10,7 @@
 
 # Open the included boablend project blend file which has the boablend hook code installed.
 /Applications/Blender/blender.app/Contents/MacOS/blender \
-./blender280b_new_file__hook_enabled.blend
+./blender280b_boablend_hook_enabled.blend
 
 
 # Open the Blender application only. Presumably, you will then manually open a blend file which has
