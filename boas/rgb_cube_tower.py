@@ -53,6 +53,7 @@ if not dir in sys.path:
 import boablend.camera
 import boablend.util
 import boablend.constants as CONST
+import boablend.primitives.cube
 
 # Importlib's reload() is used to ensure that every time this project is executed, any Boablend code
 # changes will be picked up. This is necessary in the case that the Blender blend file containing
@@ -64,6 +65,7 @@ importlib.reload(boablend)
 importlib.reload(boablend.camera)
 importlib.reload(boablend.util)
 importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
+importlib.reload(boablend.primitives.cube)
 ####################################################################################################
 
 
@@ -126,7 +128,7 @@ cube_side_length = cube_size
 # Version 2.80b NOTE: Change the attribute name from 'radius' to 'size' and use cube_side_length
 # as the radius. Make sure to change the corresponding variable names for consistency.
 
-cube_defaults = {
+rgb_tower_cube_template = {
     'xloc': 0,
     'yloc': 0,
     'zloc': 0,
@@ -147,33 +149,33 @@ cube_defaults = {
 ################################## FUNCTION AND CLASS DEFINITIONS ##################################
 
 
-def instantiate_cube(cube):
-    # Create the mesh object.
-    bpy.ops.mesh.primitive_cube_add(
-        size = cube['size'],
-        location = (cube['xloc'], cube['yloc'], cube['zloc'])
-    )
+# def instantiate_cube(cube):
+#     # Create the mesh object.
+#     bpy.ops.mesh.primitive_cube_add(
+#         size = cube['size'],
+#         location = (cube['xloc'], cube['yloc'], cube['zloc'])
+#     )
 
-    # Add and adjust the physics.
-    bpy.ops.rigidbody.object_add()
-    obj = bpy.context.object  # For more concise code.
-    obj.rigid_body.mass = cube['mass']
-    obj.rigid_body.collision_shape = cube['collision_shape']
-    obj.rigid_body.friction = cube['friction']
-    obj.rigid_body.use_margin = cube['use_margin']
-    obj.rigid_body.collision_margin = cube['collision_margin']
-    obj.rigid_body.linear_damping = cube['linear_damping']
-    obj.rigid_body.angular_damping = cube['angular_damping']
+#     # Add and adjust the physics.
+#     bpy.ops.rigidbody.object_add()
+#     obj = bpy.context.object  # For more concise code.
+#     obj.rigid_body.mass = cube['mass']
+#     obj.rigid_body.collision_shape = cube['collision_shape']
+#     obj.rigid_body.friction = cube['friction']
+#     obj.rigid_body.use_margin = cube['use_margin']
+#     obj.rigid_body.collision_margin = cube['collision_margin']
+#     obj.rigid_body.linear_damping = cube['linear_damping']
+#     obj.rigid_body.angular_damping = cube['angular_damping']
 
-    mat_name = 'mat_' + str(cube['color_x']) + \
-                  '_' + str(cube['color_y']) + \
-                  '_' + str(cube['color_z'])
-    mat = bpy.data.materials.new(name=mat_name)
-    mat.diffuse_color = (cube['color_x'], cube['color_y'], cube['color_z'], CONST.ALPHA_FULL_OPAQUE)
+#     mat_name = 'mat_' + str(cube['color_x']) + \
+#                   '_' + str(cube['color_y']) + \
+#                   '_' + str(cube['color_z'])
+#     mat = bpy.data.materials.new(name=mat_name)
+#     mat.diffuse_color = (cube['color_x'], cube['color_y'], cube['color_z'], CONST.ALPHA_FULL_OPAQUE)
 
-    bpy.ops.object.mode_set(mode='OBJECT')  # Can't assign materials in editmode. Enter object mode.
+#     bpy.ops.object.mode_set(mode='OBJECT')  # Can't assign materials in editmode. Enter object mode.
 
-    bpy.context.object.active_material = mat
+#     bpy.context.object.active_material = mat
 
 
 ########################################## MAIN EXECUTION ##########################################
@@ -199,6 +201,14 @@ main_camera.write()
 
 logger.dump_environment_info()
 
+cube_maker = boablend.primitives.cube.Cube(cube=rgb_tower_cube_template)
+# TODO: primitives.Cube does not currently have accessors for individual cube attributes, so
+# below you will see direct access to the cube dictionary in the instance. Currently I am
+# considering various design patters to use in boablend where one of the challenges is having a
+# high number of attributes for most Blender objects. Of course direct access is always possible
+# in Python, although not always desireable. One approach may be to provide accessors (or even
+# just setters) for only the most commonly used attributes, such as position and color values as
+# in the case of the current Boa.
 
 # Tower Construction
 
@@ -215,16 +225,16 @@ for a in range(0, cubes_z_height):
         #color_x = (b + 1) / cubes_x_width
         color_x = b / cubes_x_width
         for c in range(0, cubes_y_depth):
-            cube = cube_defaults
+            #cube = cube_defaults  # Now using class. Instance already created. Will be resused.
             #color_y = (c + 1) / cubes_y_depth
             color_y = c / cubes_y_depth
-            cube['xloc'] = current_x_position + cube_side_length
-            cube['yloc'] = current_y_position - cube_side_length
-            cube['zloc'] = current_z_position - cube_side_length
-            cube['color_x'] = color_x
-            cube['color_y'] = color_y
-            cube['color_z'] = color_z
-            instantiate_cube(cube)
+            cube_maker.cube['xloc'] = current_x_position + cube_side_length
+            cube_maker.cube['yloc'] = current_y_position - cube_side_length
+            cube_maker.cube['zloc'] = current_z_position - cube_side_length
+            cube_maker.cube['color_x'] = color_x
+            cube_maker.cube['color_y'] = color_y
+            cube_maker.cube['color_z'] = color_z
+            cube_maker.create()
             current_x_position += cube_side_length
 
 
