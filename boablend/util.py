@@ -8,7 +8,8 @@ class Logger:
         self.pp = pprint.PrettyPrinter(indent=4)
 
     def line(self):
-        print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
+        print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"
+              " - - - - - - - - - - -")
     
     def log(self, msg):
         self.line()

@@ -133,21 +133,24 @@ bpy.ops.object.delete()  # This will delete all selected objects, so make sure o
 
 # New instance of boablend.Camera with default boablend settings:
 main_camera = boablend.camera.Camera()
-# Optionally, we could apply desired settings at the time of intantiation:
+# Optionally, we could apply desired settings at the time of instantiation:
 #main_camera = boablend.camera.Camera(cam=rgb_cube_tower_camera_settings)
+boablend_default_camera_settings = main_camera.get()
+logger.log('Boablend camera class default camera settings:')
+logger.dump(boablend_default_camera_settings)
 
 # Note that the boablend default camera settings are not the same as Blender's.
 # Right now we have boablend's stored in the instance but next we will retreive Blender's.
-# If we wanted to look at boablend's default settings, we could use main_camera.get().
+# Just above here we did look at boablend's default camera settings by using main_camera.get().
 # But what we will do next is main_camera.read(), which retrieves and stores Blender's settings.
 
 # First before changing any camera settings and for illustrative purposes, let's retrieve the
 # current (default) camera settings from the blend file and dump them to the log.
 # Read the active camera settings in the current blend file and store them in this instance.
 # The camera.read() method also returns the settings/attributes dictionary.
-initial_default_camera_settings = main_camera.read()
-logger.log('Initial/default camera settings:')
-logger.dump(initial_default_camera_settings)
+blender_default_camera_settings = main_camera.read()
+logger.log('Blender initial/default camera settings:')
+logger.dump(blender_default_camera_settings)
 
 # Next we store the settings we will need for rgb_cube_tower into this camera instance, but note
 # that they will not be applied (written) to the blend file until we explicitly do so.
@@ -163,10 +166,11 @@ logger.dump(current_stored_camera_settings)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Instantiate a 'cube maker'.
-# In the current design and for this Boa, it makes the most sense to just re-use a single instance,
-# but in other situations, we might want a separate instance of boablend.primitives.cube.Cube for
-# each of many Cubes. These sorts of things are flexible and also the design of boablend itself is
-# still very much in flux and such concepts are being explored as boablend evolves.
+# In the current design and for this Boa, it makes the most sense to just re-use a single instance
+# of the primitives.cube.Cube class, but in other situations, we might want a separate instance of
+# primitives.cube.Cube for each of many Cubes. These sorts of things are flexible and also the
+# design of boablend itself is still very much in flux and such concepts are being explored as
+# boablend evolves.
 
 cube_maker = boablend.primitives.cube.Cube(cube=rgb_tower_cube_template)
 # TODO: primitives.cube.Cube does not currently have accessors for individual cube attributes, so
@@ -200,9 +204,11 @@ for a in range(0, cubes_z_height):
             cube_maker.cube['xloc'] = current_x_position + cube_side_length
             cube_maker.cube['yloc'] = current_y_position - cube_side_length
             cube_maker.cube['zloc'] = current_z_position - cube_side_length
-            cube_maker.cube['color_x'] = color_x
-            cube_maker.cube['color_y'] = color_y
-            cube_maker.cube['color_z'] = color_z
+            # cube_maker.cube['color_x'] = color_x
+            # cube_maker.cube['color_y'] = color_y
+            # cube_maker.cube['color_z'] = color_z
+            rgb_tuple = (color_x, color_y, color_z)
+            cube_maker.set_color(rgb_tuple)
             cube_maker.create()
             current_x_position += cube_side_length
 

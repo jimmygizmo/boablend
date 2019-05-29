@@ -50,14 +50,11 @@ class Camera:
     # props dictionary then this would makes sense. Still carefully considering the design patterns
     # in this area.
     
-
     def store(self, cam):
         """The store() method takes a camera settings dictionary and stores those settings in the
         current instance. Settings are not applied to an actual camera. Use the apply() method to
         cause the settings to take effect on the Blender main camera."""
-
         self.cam = cam
-
 
     def write(self):
         """The write() method applies the camera settings currently stored in the instance to the
@@ -82,7 +79,6 @@ class Camera:
         # Render Resolution / Aspect Ratio
         scene.render.resolution_x = self.cam['render_resolution_x']
         scene.render.resolution_y = self.cam['render_resolution_y']
-
 
     def read(self):
         """The read() method obtains the current main camera settings from the active blend file,
@@ -119,11 +115,9 @@ class Camera:
 
         return self.cam
 
-
     def get(self):
         """The get() method returns the camera settings dictionary currently stored in the
         instance."""
-
         return self.cam
 
 

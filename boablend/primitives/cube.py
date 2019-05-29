@@ -45,7 +45,6 @@ class Cube:
     def __init__(self, cube=default_cube):
         self.cube = cube
 
-
     def store(self, cube):
         """The store() method takes a cube attributes dictionary and stores those attributes in the
         current instance. Use the create() method to instantiate a cube primitive with the stored
@@ -53,7 +52,6 @@ class Cube:
 
         self.cube = cube
     
-
     def create(self):
         # Create the mesh object.
         bpy.ops.mesh.primitive_cube_add(
@@ -86,6 +84,8 @@ class Cube:
 
         bpy.context.object.active_material = mat
 
+    def set_color(self, rgb_color=(1,1,1)):
+        (self.cube['color_x'], self.cube['color_y'], self.cube['color_z']) = rgb_color
 
     def get(self):
         """The get() method returns the cube attributes dictionary currently stored in the
