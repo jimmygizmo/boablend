@@ -54,19 +54,27 @@ cube_corkscrew_camera_settings = {
 
 
 # Corkscrew Structure Settings
+default_corkscrew = {
+    'screw_radius': 16,
+    'screw_pitch': 6
+}
+# TODO: Complete this dict with the rest of the config and the new ones for color
+
+current_corkscrew = default_corkscrew
 
 # Radius of the corkscrew structure in Blender units
-screw_radius = 16
+screw_radius = current_corkscrew['screw_radius']
 
-# Height change per 360 degree revolution
-screw_pitch = 6
+# Height unit change per 360 degree revolution
+screw_pitch = current_corkscrew['screw_pitch']
 
 # Number of full rotations in the corkscrew structure.
 # Later we could consider supporting partial rotations by allowing specification of the total
 # number of degrees to rotate through. The current design is to drive all calculations based
 # on the angle, in an iterative manner, so we could specify two full rotations by specifying
 # a total angular rotation of 360*2 = 720 etc. We will start with the simplest design by
-# specifying integer full rotations.
+# specifying integer full rotations and then calculate a full multiple of 360 for our
+# 'completion_angle'
 screw_full_rotations = 4
 
 # Calculate completion angle. It is useful to track the total_angle because it increases linearly
@@ -107,11 +115,6 @@ corkscrew_cube_template = {
     'color_x': 0.5,
     'color_y': 0.5,
     'color_z': 0.5
-}
-
-
-default_corkscrew = {
-
 }
 
 
@@ -186,6 +189,11 @@ angle = 0
 total_angle = 0
 rotation_number = 0  # This increments after every 360 degrees of rotation.
 cube_number = 0  # This increments every time a cube is created.
+angle_ratio = 0
+total_angle_ratio = 0
+red = 0
+green = 0
+blue = 0
 
 # A refresher in basic geometry:
 # Sine = Opposite / Hypotenuse = y / r
@@ -203,17 +211,26 @@ state = {}
 
 # Iterate until angle exceeds completion_angle, meaning angle = completion_angle will be included.
 while (not total_angle > completion_angle):
+    angle_ratio = angle / 360
+    total_angle_ratio = total_angle / completion_angle
     current_x_position = screw_radius * math.cos(angle*CONST.DEG_TO_EUL_FACTOR)
     current_y_position = screw_radius * math.sin(angle*CONST.DEG_TO_EUL_FACTOR)
     current_z_position = cube_number * inter_cube_height_delta
     cube_maker.cube['xloc'] = current_x_position
     cube_maker.cube['yloc'] = current_y_position
     cube_maker.cube['zloc'] = current_z_position
+    red = angle_ratio  # Red will cycle zero to full each 360 degree rotation
+    green = total_angle_ratio  # Green and Blue will increase zero to full from start to end
+    blue = total_angle_ratio  # Green and Blue will increase zero to full from start to end
+    rgb_tuple = (red, green, blue)
+    cube_maker.set_color(rgb_tuple)
     # For logging
     state = {
         'angle': angle,
         'total_angle': total_angle,
         'completion_angle': completion_angle,
+        'angle_ratio': angle_ratio,
+        'total_angle_ratio': total_angle_ratio,
         'cube_number': cube_number,
         'cube_interval': cube_interval,
         'rotation_number': rotation_number,
@@ -234,32 +251,6 @@ while (not total_angle > completion_angle):
     # For debugging, would like to watch the cubes being created
     #bpy.context.view_layer.update()  # Does not appear to be causing the view to update as desired
     #time.sleep(1)
-
-
-# for a in range(0, cubes_z_height):
-#     current_z_position += cube_side_length
-#     current_y_position = 0
-#     #color_z = (a + 1) / cubes_z_height
-#     color_z = a / cubes_z_height
-#     for b in range(0, cubes_x_width):
-#         current_y_position += cube_side_length
-#         current_x_position = 0
-#         #color_x = (b + 1) / cubes_x_width
-#         color_x = b / cubes_x_width
-#         for c in range(0, cubes_y_depth):
-#             #cube = cube_defaults  # Now using class. Instance already created. Will be resused.
-#             #color_y = (c + 1) / cubes_y_depth
-#             color_y = c / cubes_y_depth
-#             cube_maker.cube['xloc'] = current_x_position + cube_side_length
-#             cube_maker.cube['yloc'] = current_y_position - cube_side_length
-#             cube_maker.cube['zloc'] = current_z_position - cube_side_length
-#             # cube_maker.cube['color_x'] = color_x
-#             # cube_maker.cube['color_y'] = color_y
-#             # cube_maker.cube['color_z'] = color_z
-#             rgb_tuple = (color_x, color_y, color_z)
-#             cube_maker.set_color(rgb_tuple)
-#             cube_maker.create()
-#             current_x_position += cube_side_length
 
 
 ####################################################################################################
