@@ -31,7 +31,7 @@ importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use ei
 importlib.reload(boablend.primitives.cube)
 
 
-####################################################################################################
+########################################## CONFIGURATION ###########################################
 
 
 # Camera Settings

@@ -33,7 +33,7 @@ importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use ei
 importlib.reload(boablend.primitives.cube)
 
 
-####################################################################################################
+########################################## CONFIGURATION ###########################################
 
 
 # Camera Settings
@@ -69,9 +69,12 @@ screw_pitch = 6
 # specifying integer full rotations.
 screw_full_rotations = 4
 
-completion_angle = 360 * screw_full_rotations
+# Calculate completion angle. It is useful to track the total_angle because it increases linearly
+# similar to cube_number and so it is also useful to calculate completion_angle to use as a
+# stopping point.
+completion_angle = screw_full_rotations * 360
 
-# Degrees of rotation separation between each cube
+# Degrees of rotation separation between each cube.
 # IMPORTANT: This must divide equally into 360. e.g. 3, 15, 30, 45, 90, 180
 # This requiremnt may be relaxed in future designs, but we are keeping the math simple at first.
 cube_interval = 15  # degrees
@@ -104,6 +107,11 @@ corkscrew_cube_template = {
     'color_x': 0.5,
     'color_y': 0.5,
     'color_z': 0.5
+}
+
+
+default_corkscrew = {
+
 }
 
 
@@ -170,22 +178,27 @@ cube_maker = boablend.primitives.cube.Cube(cube=corkscrew_cube_template)
 
 # Corkscrew Construction
 
-completion_angle = screw_full_rotations * 360
-
-z_position = 0
+# Initialize
+current_z_position = 0
+current_x_position = 0
+current_z_position = 0
 angle = 0
 total_angle = 0
 rotation_number = 0  # This increments after every 360 degrees of rotation.
 cube_number = 0  # This increments every time a cube is created.
 
-# A refresher in basic geometry.
+# A refresher in basic geometry:
 # Sine = Opposite / Hypotenuse = y / r
 # Cosine = Adjacent / Hypotenuse = x / r
 # Tangent = Opposite / Adjacent = y / x
 # Hence:
-# x = r * cos(angle)
-# x = r * sin(angle)
+# x = r * Cosine(degrees_angle)
+# x = r * Sine(degrees_angle)
+#
+# x = r * math.cos(radian_angle)
+# x = r * math.sin(radian_angle)
 
+# To be used for inner-loop logging.
 state = {}
 
 # Iterate until angle exceeds completion_angle, meaning angle = completion_angle will be included.
@@ -196,6 +209,7 @@ while (not total_angle > completion_angle):
     cube_maker.cube['xloc'] = current_x_position
     cube_maker.cube['yloc'] = current_y_position
     cube_maker.cube['zloc'] = current_z_position
+    # For logging
     state = {
         'angle': angle,
         'total_angle': total_angle,
