@@ -67,7 +67,7 @@ screw_pitch = 6
 # on the angle, in an iterative manner, so we could specify two full rotations by specifying
 # a total angular rotation of 360*2 = 720 etc. We will start with the simplest design by
 # specifying integer full rotations.
-screw_full_rotations = 1
+screw_full_rotations = 4
 
 completion_angle = 360 * screw_full_rotations
 
@@ -175,8 +175,8 @@ completion_angle = screw_full_rotations * 360
 z_position = 0
 angle = 0
 total_angle = 0
-rotation_number = 1  # This increments after every 360 degrees of rotation.
-cube_number = 1  # This increments every time a cube is created.
+rotation_number = 0  # This increments after every 360 degrees of rotation.
+cube_number = 0  # This increments every time a cube is created.
 
 # A refresher in basic geometry.
 # Sine = Opposite / Hypotenuse = y / r
@@ -186,15 +186,29 @@ cube_number = 1  # This increments every time a cube is created.
 # x = r * cos(angle)
 # x = r * sin(angle)
 
+state = {}
 
 # Iterate until angle exceeds completion_angle, meaning angle = completion_angle will be included.
 while (not total_angle > completion_angle):
-    current_x_position = screw_radius * math.cos(angle)
-    current_y_position = screw_radius * math.sin(angle)
+    current_x_position = screw_radius * math.cos(angle*CONST.DEG_TO_EUL_FACTOR)
+    current_y_position = screw_radius * math.sin(angle*CONST.DEG_TO_EUL_FACTOR)
     current_z_position = cube_number * inter_cube_height_delta
     cube_maker.cube['xloc'] = current_x_position
     cube_maker.cube['yloc'] = current_y_position
     cube_maker.cube['zloc'] = current_z_position
+    state = {
+        'angle': angle,
+        'total_angle': total_angle,
+        'completion_angle': completion_angle,
+        'cube_number': cube_number,
+        'cube_interval': cube_interval,
+        'rotation_number': rotation_number,
+        'inter_cube_height_delta': inter_cube_height_delta,
+        'current_x_position': current_x_position,
+        'current_y_position': current_y_position,
+        'current_z_position': current_z_position
+    }
+    logger.dump(state)
     cube_maker.create()
     # Calcualtions for next iteration:
     angle += cube_interval
@@ -204,8 +218,8 @@ while (not total_angle > completion_angle):
         rotation_number += 1
         angle = angle - 360
     # For debugging, would like to watch the cubes being created
-    bpy.context.view_layer.update()  # Can't tell if this is doing anything
-    time.sleep(1)
+    #bpy.context.view_layer.update()  # Does not appear to be causing the view to update as desired
+    #time.sleep(1)
 
 
 # for a in range(0, cubes_z_height):
