@@ -1,64 +1,43 @@
 
 ########################################## BOABLEND HOOK ###########################################
-# boablend_hook_version = '2019-005'
-####################################################################################################
-# Install all of the code in this file into a Text Object within Blender.
-# It is recommended to name this Text Object 'boablend_hook'.
-# Click 'Run Script' on this Text Object or perform an equivalent action to run the current Boablend
-# project configuration. Other modes of execution may be available in the future. Dispatching of
-# different/specific Boa files occurs in boablend_start.py. This hook code should remain as generic
-# and simple as possible.
-# Hook code  will likely always be a very small amount of code. If any changes are ever needed to
-# the hook code or if it is updated along with this project, you will need to manually (cut/paste)
-# the updated hook code back into the blend file Text object.
+# boablend_hook_version = '2019-006'
+# See: /docs/boablend_hook_installation.txt
 ####################################################################################################
 
 ####################################################################################################
 import bpy  # This import works when executing within Blender but will show an import error in IDEs.
-# Regarding import errors showing in your IDE for 'import bpy':
-# /docs/import_bpy_error_in_ide.txt
+# See: /docs/import_bpy_error_in_ide.txt
 ####################################################################################################
 
 import os
 
 
 # Set verbose to True to print status and diagnostic info to STDOUT.
-# This flag only affects output from this hook code.
+# This flag only affects output from this boablend hook code.
 verbose = True
 
-
 ################################ BOABLEND ENTRY POINT CONFIGURATION ################################
-# The executable python file which imports most of this project's dependencies and runs the main
-# code. It may never be necessary to change this and in fact it may not be recommended to. To fork
-# or customize execution in your Boablend project, you will probably have a better method and
-# location to do this within the entry point file itself and that would usually be more appropriate.
-#
-# TODO: Implement a dispatch mechanism in the entry point code so that some externalized and
-# and configurable switching mechanism will select which project-specific code to execute. A naming
-# convention is needed here.
 
-# The following path must be expressed:
-# RELATIVE TO THE CURRENT BLEND FILE CONTAINING THIS HOOK CODE.
+# Path to the Boablend entry point file, relative to the current Blender blend file containing
+# this boablend hook code:
 boablend_entry_point = 'boablend_start.py'
 
 ####################################################################################################
 
 
-if verbose:
-    print()
-    print("~~~~~~~~~~~~~~~~~~~~ Boablend starting.")
-
 current_working_directory = os.getcwd()
-print("Blender file current working directory: ")
-print(current_working_directory)
-
-if verbose:
-    print("Boablend entry point filename: {}".\
-        format(boablend_entry_point))
-
 filepath = bpy.path.abspath("//{}".format(boablend_entry_point))
 
 if verbose:
+    print()
+    print("################################################################################"
+          "####################")
+    print("BOABLEND STARTING")
+    print()
+    print("Blender file current working directory: ")
+    print(current_working_directory)
+    print("Boablend entry point filename: {}".\
+        format(boablend_entry_point))
     print("Executing entry point at: ")
     print(filepath)
 
