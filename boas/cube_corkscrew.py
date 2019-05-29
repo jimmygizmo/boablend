@@ -12,6 +12,7 @@ import bpy  # This import works when executing within Blender but will show an i
 import sys
 import os
 import math
+import time
 
 # See: /docs/sys_path_hack_in_boa_files.txt
 dir = os.path.dirname(bpy.data.filepath)
@@ -66,7 +67,9 @@ screw_pitch = 6
 # on the angle, in an iterative manner, so we could specify two full rotations by specifying
 # a total angular rotation of 360*2 = 720 etc. We will start with the simplest design by
 # specifying integer full rotations.
-screw_full_rotations = 4
+screw_full_rotations = 1
+
+completion_angle = 360 * screw_full_rotations
 
 # Degrees of rotation separation between each cube
 # IMPORTANT: This must divide equally into 360. e.g. 3, 15, 30, 45, 90, 180
@@ -75,9 +78,11 @@ cube_interval = 15  # degrees
 
 intervals_per_rotation = 360 / cube_interval  # This needs to be an integer for now.
 
+inter_cube_height_delta = screw_pitch / intervals_per_rotation
+
 # Rotate each cube appropriately to keep the centerline parallel to a radius line.
 # i.e. keep the cube faces tangentially parallel to what would be the cylinder walls.
-# If this is false, all the cubes will be aligned with the world space XYZ axis.
+# If this is false, all the cubes will be aligned the same with the world space XYZ axis.
 #axis_align_cubes = True  # Currently not supported.
 
 # Cube dimensions
@@ -183,10 +188,25 @@ cube_number = 1  # This increments every time a cube is created.
 
 
 # Iterate until angle exceeds completion_angle, meaning angle = completion_angle will be included.
-while (not angle > completion_angle):
+while (not total_angle > completion_angle):
     current_x_position = screw_radius * math.cos(angle)
     current_y_position = screw_radius * math.sin(angle)
-    current_z_position = cube_number * 
+    current_z_position = cube_number * inter_cube_height_delta
+    cube_maker.cube['xloc'] = current_x_position
+    cube_maker.cube['yloc'] = current_y_position
+    cube_maker.cube['zloc'] = current_z_position
+    cube_maker.create()
+    # Calcualtions for next iteration:
+    angle += cube_interval
+    total_angle += cube_interval
+    cube_number += 1
+    if angle > 360:
+        rotation_number += 1
+        angle = angle - 360
+    # For debugging, would like to watch the cubes being created
+    bpy.context.view_layer.update()  # Can't tell if this is doing anything
+    time.sleep(1)
+
 
 # for a in range(0, cubes_z_height):
 #     current_z_position += cube_side_length
