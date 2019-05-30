@@ -62,10 +62,10 @@ cube_corkscrew_camera_settings = {
 # Corkscrew Structure Settings
 default_corkscrew = {
     'screw_radius': 14,
-    'screw_pitch': 8,
-    'screw_full_rotations': 14,
+    'screw_pitch': 16,
+    'screw_full_rotations': 18,
     'cube_interval': 15,
-    'screw_height_offset': 100,
+    'screw_height_offset': 80,
     'axis_align_cubes': True
 }
 
@@ -198,6 +198,29 @@ cube_maker = boablend.primitives.cube.Cube(cube=corkscrew_cube_defaults)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+# Create ground plane, scale it and assign physics attributes to it.
+bpy.ops.mesh.primitive_plane_add(size=2, enter_editmode=False, location=(0, 0, 0))
+# TODO: Certainly this scale can be simplified, probably to:
+#bpy.ops.transform.resize(value=(90, 90, 90))
+bpy.ops.transform.resize(value=(90, 90, 90),
+                         orient_type='GLOBAL',
+                         orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)),
+                         orient_matrix_type='GLOBAL',
+                         mirror=True,
+                         use_proportional_edit=False,
+                         proportional_edit_falloff='SMOOTH',
+                         proportional_size=1,
+                         use_proportional_connected=False,
+                         use_proportional_projected=False)
+bpy.ops.rigidbody.object_add()
+bpy.context.object.rigid_body.type = 'PASSIVE'
+bpy.context.object.rigid_body.collision_shape = 'MESH'
+bpy.context.object.rigid_body.collision_margin = 0
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
 # Corkscrew Construction
 
 # Initialize the iteration variables
@@ -234,7 +257,7 @@ while (not total_angle > completion_angle):
     total_angle_ratio = total_angle / completion_angle
     current_x_position = screw_radius * math.cos(angle*CONST.DEG_TO_EUL_FACTOR)
     current_y_position = screw_radius * math.sin(angle*CONST.DEG_TO_EUL_FACTOR)
-    current_z_position = cube_number * inter_cube_height_delta
+    current_z_position = (cube_number * inter_cube_height_delta) + screw_height_offset
     cube_maker.cube['xloc'] = current_x_position
     cube_maker.cube['yloc'] = current_y_position
     cube_maker.cube['zloc'] = current_z_position
