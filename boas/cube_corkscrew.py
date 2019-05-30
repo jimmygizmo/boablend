@@ -12,7 +12,13 @@ import bpy  # This import works when executing within Blender but will show an i
 import sys
 import os
 import math
-import time
+import colorsys  # To convert HSV color to RGB color.
+# Our corkscrew most readily provides TWO-dimensions of change to use to map RGB colors for coloring
+# each cube, with those being angle and height. To simplify mapping ALL the colors in the RGB color
+# space, a good solution is to convert an HSV color, in which value is held constant at FULL, into
+# RGB. For this we use the standard library colorsys. Colorsys is available in the standard Python 3
+# library and also within Blender's build in Python 3 environment.
+# See: https://en.wikipedia.org/wiki/HSL_and_HSV
 
 # See: /docs/sys_path_hack_in_boa_files.txt
 dir = os.path.dirname(bpy.data.filepath)
@@ -55,10 +61,15 @@ cube_corkscrew_camera_settings = {
 
 # Corkscrew Structure Settings
 default_corkscrew = {
-    'screw_radius': 16,
-    'screw_pitch': 6
+    'screw_radius': 14,
+    'screw_pitch': 8,
+    'screw_full_rotations': 14,
+    'cube_interval': 15,
+    'screw_height_offset': 100,
+    'axis_align_cubes': True
 }
-# TODO: Complete this dict with the rest of the config and the new ones for color
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 current_corkscrew = default_corkscrew
 
@@ -75,7 +86,7 @@ screw_pitch = current_corkscrew['screw_pitch']
 # a total angular rotation of 360*2 = 720 etc. We will start with the simplest design by
 # specifying integer full rotations and then calculate a full multiple of 360 for our
 # 'completion_angle'
-screw_full_rotations = 4
+screw_full_rotations = current_corkscrew['screw_full_rotations']
 
 # Calculate completion angle. It is useful to track the total_angle because it increases linearly
 # similar to cube_number and so it is also useful to calculate completion_angle to use as a
@@ -85,10 +96,13 @@ completion_angle = screw_full_rotations * 360
 # Degrees of rotation separation between each cube.
 # IMPORTANT: This must divide equally into 360. e.g. 3, 15, 30, 45, 90, 180
 # This requiremnt may be relaxed in future designs, but we are keeping the math simple at first.
-cube_interval = 15  # degrees
+cube_interval = current_corkscrew['cube_interval']  # Degrees
 
+# Calculate the intervals per rotation.
 intervals_per_rotation = 360 / cube_interval  # This needs to be an integer for now.
 
+# Calculate the height change/delta between consecutive cubes, using the screw pitch and the
+# intervals per rotation we just calculated.
 inter_cube_height_delta = screw_pitch / intervals_per_rotation
 
 # Rotate each cube appropriately to keep the centerline parallel to a radius line.
@@ -96,11 +110,16 @@ inter_cube_height_delta = screw_pitch / intervals_per_rotation
 # If this is false, all the cubes will be aligned the same with the world space XYZ axis.
 #axis_align_cubes = True  # Currently not supported.
 
+# Height offset for the entire corkscrew, useful for setting the drop height for physics
+# simulation and animation.
+screw_height_offset = current_corkscrew['screw_height_offset']
+
+
 # Cube dimensions
 cube_size = 2
-cube_side_length = cube_size
 
-corkscrew_cube_template = {
+# Default cube attributes
+corkscrew_cube_defaults = {
     'xloc': 0,
     'yloc': 0,
     'zloc': 0,
@@ -139,7 +158,7 @@ bpy.ops.object.delete()  # This will delete all selected objects, so make sure o
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Camera Setup for this project. Settings will provide the optimal framing of the tower animation.
+# Camera Setup for this project.
 
 # New instance of boablend.Camera with default boablend settings:
 main_camera = boablend.camera.Camera()
@@ -175,13 +194,13 @@ logger.dump(current_stored_camera_settings)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-cube_maker = boablend.primitives.cube.Cube(cube=corkscrew_cube_template)
+cube_maker = boablend.primitives.cube.Cube(cube=corkscrew_cube_defaults)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Corkscrew Construction
 
-# Initialize
+# Initialize the iteration variables
 current_z_position = 0
 current_x_position = 0
 current_z_position = 0
@@ -219,10 +238,26 @@ while (not total_angle > completion_angle):
     cube_maker.cube['xloc'] = current_x_position
     cube_maker.cube['yloc'] = current_y_position
     cube_maker.cube['zloc'] = current_z_position
-    red = angle_ratio  # Red will cycle zero to full each 360 degree rotation
-    green = total_angle_ratio  # Green and Blue will increase zero to full from start to end
-    blue = total_angle_ratio  # Green and Blue will increase zero to full from start to end
-    rgb_tuple = (red, green, blue)
+
+    # This color model is nice, but let's try using an HSV conversion so we can more easily get ALL
+    # of the RGB colors.
+    #
+    # # Red will cycle from zero to full each 360 degree rotation
+    # red = angle_ratio
+    # # Green will increase from zero to full from bottom to top
+    # green = total_angle_ratio
+    # # Blue will increase from zero to full from top to bottom
+    # blue = total_angle_ratio
+    # rgb_tuple = (red, green, blue)
+
+    fixed_hsv_saturation = 1
+
+    hsv_hue = angle_ratio
+    #hsv_saturation = total_angle_ratio
+    hsv_saturation = fixed_hsv_saturation
+    hsv_value = total_angle_ratio
+    rgb_tuple = colorsys.hsv_to_rgb(hsv_hue, hsv_saturation, hsv_value)
+
     cube_maker.set_color(rgb_tuple)
     # For logging
     state = {
@@ -234,6 +269,7 @@ while (not total_angle > completion_angle):
         'cube_number': cube_number,
         'cube_interval': cube_interval,
         'rotation_number': rotation_number,
+        'intervals_per_rotation': intervals_per_rotation,
         'inter_cube_height_delta': inter_cube_height_delta,
         'current_x_position': current_x_position,
         'current_y_position': current_y_position,
@@ -245,105 +281,12 @@ while (not total_angle > completion_angle):
     angle += cube_interval
     total_angle += cube_interval
     cube_number += 1
-    if angle > 360:
+    if angle >= 360:
         rotation_number += 1
         angle = angle - 360
     # For debugging, would like to watch the cubes being created
     #bpy.context.view_layer.update()  # Does not appear to be causing the view to update as desired
     #time.sleep(1)
-
-
-####################################################################################################
-# Remaining Manual Steps Requiring Automation
-# The following steps are also required to build and render a complete animation as seen in the
-# linked YouTube video.
-#
-# Most or all settings detailed below were the ones used for the demo YouTube video rendering:
-# https://www.youtube.com/watch?v=1j7_nHfTeaw
-
-# RGB Cube Tower is inspired by a tutorial video by 'Olav3D Tutorials':
-# https://www.youtube.com/watch?v=KI0tjZUkb5A
-# Watch this video to see the entirety of manual steps required to make a physics simulation and
-# animation like this.
-
-# - - - - - - - - - -
-
-# - Instantiate floor plane.
-# - Position/lower floor plane for desired fall height.
-# - X,Y are 0,0. Z position is -38.88964.
-# bpy.context.object.location[2] = -38.8896
-# # - Plane scale XYZ are all 86.784.
-# bpy.context.object.scale[0] = 86.7839
-# bpy.context.object.scale[1] = 86.7839
-# bpy.context.object.scale[2] = 86.7839
-
-# - - - - - - - - - -
-
-# - Go into Scene, Rigid Body World.
-# bpy.context.space_data.context = 'SCENE'
-# - Increase quality of animation by setting Steps Per Second.
-# - 500 = good/high quality (Used for the example YouTube video.) Lower setting = faster render.
-
-# - In Rigid Body Cache sub-section, set end point to 760 (frames).
-# Before baking it is probably a good idea to trigger/click Free All Bakes, maybe also Free Bake
-# which would be best to do first. Free Bake probably is not possible if there has never been bake
-# and the same should be looked into for Free All Bakes.
-# Free All Bakes: bpy.ops.ptcache.free_bake_all()
-# Need the code for Free Bake.
-# - Trigger (Click) Bake. This bake may take about 10 minutes.
-# bpy.ops.ptcache.bake(bake=True)
-# - Nearly all cubes have stopped moving after about 760 frames. Total duration about 9 seconds.
-
-# - - - - - - - - - -
-
-# - Set animation timeline end frame to 760 to match the physics bake.
-# bpy.context.area.type = 'TIMELINE'
-# bpy.context.scene.frame_end = 700
-
-# - - - - - - - - - -
-
-# Add a light of type Sun. ('layers' argument has been removed from below command for brevity.)
-# bpy.ops.object.lamp_add(type='SUN', radius=1, view_align=False,
-#     location=(-9.51748, 7.88541, -10.5362))
-# The above values are not correct. Use the following:
-# bpy.context.object.location[0] = 28.1261
-# bpy.context.object.location[1] = -14.7615
-# bpy.context.object.location[2] = 54.1666
-# bpy.context.object.rotation_euler[0] = 0.265283
-# bpy.context.object.rotation_euler[1] = -0.0242171
-# bpy.context.object.rotation_euler[2] = 0.0888926
-# The Sun's Strength needs to be set to 7 and this requires creating a Node.
-# ** Node creation code not shown here, just the selection/setting of the Strength value.
-# bpy.data.node_groups["Shader Nodetree"].nodes["Emission"].inputs[1].default_value = 7
-# ** Attemted recreating Node and only the same setting code was generated.
-# IMPORTANT: Above notes are from Blender 2.79, but things are different and actually more clear
-# with Blender 2.80b. Nodes do not appear to be involved and things are straightforward:
-# bpy.ops.object.light_add(type='SUN', radius=1, view_align=False, location=(0, 0, 0))
-# bpy.context.space_data.context = 'DATA'
-# bpy.context.object.data.energy = 7
-# DECISION: Other differences between 2.79 and 2.80 have been noted elsewhere, but this difference
-# is significant enough that the boablend project going forward will only support Blender 2.80.
-
-# - - - - - - - - - -
-
-# Set up render engine and render settings. See original Olav3D utorial video at 9:09.
-# https://www.youtube.com/watch?v=KI0tjZUkb5A
-
-# - - - - - - - - - -
-
-
-
-# - - - - - - - - - -
-
-
-
-# - - - - - - - - - -
-
-
-
-# - - - - - - - - - -
-
-
 
 
 ##
