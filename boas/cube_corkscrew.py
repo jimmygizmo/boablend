@@ -218,6 +218,12 @@ bpy.context.object.rotation_euler[2] = 0.138655
 # Y -14.126d
 # Z 7.94436d
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Background Color - Pure White
+
+#bpy.context.space_data.context = 'WORLD'
+#bpy.data.node_groups["Shader Nodetree"].nodes["Background"].inputs[0].default_value = (1, 1, 1, 1)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
