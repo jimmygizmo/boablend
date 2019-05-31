@@ -19,7 +19,7 @@ if not dir in sys.path:
 import boablend.camera
 import boablend.util
 import boablend.constants as CONST
-import boablend.primitives.cube
+import boablend.primitive.cube
 
 # See: /docs/use_of_importlib_reload.txt
 import importlib
@@ -27,7 +27,7 @@ importlib.reload(boablend)
 importlib.reload(boablend.camera)
 importlib.reload(boablend.util)
 importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
-importlib.reload(boablend.primitives.cube)
+importlib.reload(boablend.primitive.cube)
 
 
 ########################################## CONFIGURATION ###########################################
@@ -165,13 +165,13 @@ logger.dump(current_stored_camera_settings)
 
 # Instantiate a 'cube maker'.
 # In the current design and for this Boa, it makes the most sense to just re-use a single instance
-# of the primitives.cube.Cube class, but in other situations, we might want a separate instance of
-# primitives.cube.Cube for each of many Cubes. These sorts of things are flexible and also the
+# of the primitive.cube.Cube class, but in other situations, we might want a separate instance of
+# primitive.cube.Cube for each of many Cubes. These sorts of things are flexible and also the
 # design of boablend itself is still very much in flux and such concepts are being explored as
 # boablend evolves.
 
-cube_maker = boablend.primitives.cube.Cube(cube=rgb_tower_cube_template)
-# TODO: primitives.cube.Cube does not currently have accessors for individual cube attributes, so
+cube_maker = boablend.primitive.cube.Cube(cube=rgb_tower_cube_template)
+# TODO: primitive.cube.Cube does not currently have accessors for individual cube attributes, so
 # below you will see direct access to the cube dictionary in the instance. Currently I am
 # considering various design patters to use in boablend where one of the challenges is having a
 # high number of attributes for most Blender objects. Of course direct access is usually possible

@@ -27,7 +27,7 @@ if not dir in sys.path:
 import boablend.camera
 import boablend.util
 import boablend.constants as CONST
-import boablend.primitives.cube
+import boablend.primitive.cube
 
 # See: /docs/use_of_importlib_reload.txt
 import importlib
@@ -35,7 +35,7 @@ importlib.reload(boablend)
 importlib.reload(boablend.camera)
 importlib.reload(boablend.util)
 importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
-importlib.reload(boablend.primitives.cube)
+importlib.reload(boablend.primitive.cube)
 
 
 ########################################## CONFIGURATION ###########################################
@@ -196,34 +196,31 @@ main_camera.write()
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Lighting Setup
+# TODO: Add lighting support to boablend in a new sub-module.
 
 bpy.ops.object.light_add(type='SUN', radius=1, location=(0, 0, 0))
-#bpy.data.objects['Sun'].select_set(True)  # Had to select it for the context to be correct for the
-# following operation to set the strength.
+#bpy.data.objects['Sun'].select_set(True)  # Turns out not necessary to select it in this case.
 bpy.context.object.data.energy = 7
 
-bpy.context.object.location[0] = -27.9868
-bpy.context.object.location[1] = 0
+bpy.context.object.location[0] = -24.6268
+bpy.context.object.location[1] = 14.53
 bpy.context.object.location[2] = 50.21
-bpy.context.object.rotation_euler[0] = -0.284267
-bpy.context.object.rotation_euler[1] = -0.246545
-bpy.context.object.rotation_euler[2] = 0.138655
+bpy.context.object.rotation_euler[0] = -41.9041 * CONST.DEG_TO_EUL_FACTOR
+bpy.context.object.rotation_euler[1] = -27.3757 * CONST.DEG_TO_EUL_FACTOR
+bpy.context.object.rotation_euler[2] = 14.7018 * CONST.DEG_TO_EUL_FACTOR
 
-# Loc:
-# X -27.9868m
-# Y 0
-# Z 50.21m
-# Rot:
-# X -16.2873d
-# Y -14.126d
-# Z 7.94436d
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Background Color - Pure White
 
-#bpy.context.space_data.context = 'WORLD'
+# bpy.context.space_data.context = 'WORLD'  # Nope
 #bpy.data.node_groups["Shader Nodetree"].nodes["Background"].inputs[0].default_value = (1, 1, 1, 1)
+#bpy.context.scene.background_set(1, 1, 1, 1)
+#bpy.context.scene.node_groups["Shader Nodetree"].nodes["Background"].inputs[0].default_value = (1, 1, 1, 1)
+#bpy.data.nodes["Background"].inputs[0].default_value = (1, 1, 1, 1)
+
+# Possible clue: https://blender.stackexchange.com/questions/39591/empty-bpy-data-node-groups
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -241,7 +238,7 @@ bpy.context.scene.frame_end = 680
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-cube_maker = boablend.primitives.cube.Cube(cube=corkscrew_cube_defaults)
+cube_maker = boablend.primitive.cube.Cube(cube=corkscrew_cube_defaults)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -302,9 +299,11 @@ state = {}
 while (not total_angle > completion_angle):
     angle_ratio = angle / 360
     total_angle_ratio = total_angle / completion_angle
-    current_x_position = screw_radius * math.cos(angle*CONST.DEG_TO_EUL_FACTOR)
-    current_y_position = screw_radius * math.sin(angle*CONST.DEG_TO_EUL_FACTOR)
+    current_x_position = screw_radius * math.cos(angle * CONST.DEG_TO_EUL_FACTOR)
+    current_y_position = screw_radius * math.sin(angle * CONST.DEG_TO_EUL_FACTOR)
     current_z_position = (cube_number * inter_cube_height_delta) + screw_height_offset
+    # TODO: Probably want to make a setter that takes a 3-field tuple for location, like we did for
+    # color.
     cube_maker.cube['xloc'] = current_x_position
     cube_maker.cube['yloc'] = current_y_position
     cube_maker.cube['zloc'] = current_z_position
@@ -316,8 +315,9 @@ while (not total_angle > completion_angle):
     # red = angle_ratio
     # # Green will increase from zero to full from bottom to top
     # green = total_angle_ratio
-    # # Blue will increase from zero to full from top to bottom
+    # # Blue will increase from zero to full from bottom to top
     # blue = total_angle_ratio
+    # (Use (1 - total_angle_ratio) to go from top to bottom instead.)
     # rgb_tuple = (red, green, blue)
 
     fixed_hsv_saturation = 1

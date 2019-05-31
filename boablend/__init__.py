@@ -8,7 +8,7 @@
 # All modules in boablend must be imported individually to use. e.g.
 # 'import boablend.util'
 # 'import boablend.constants'
-# 'import boablend.primitives.cube'
+# 'import boablend.primitive.cube'
 #
 # 
 
