@@ -5,7 +5,6 @@
 
 ####################################################################################################
 import bpy  # This import works when executing within Blender but will show an import error in IDEs.
-# Regarding import errors showing in your IDE for 'import bpy':
 # See: /docs/import_bpy_error_in_ide.txt
 ####################################################################################################
 
@@ -13,11 +12,11 @@ import sys
 import os
 import math
 import colorsys  # To convert HSV color to RGB color.
-# Our corkscrew most readily provides TWO-dimensions of change to use to map RGB colors for coloring
+# Our corkscrew most readily provides TWO dimensions of change to use to map RGB colors for coloring
 # each cube, with those being angle and height. To simplify mapping ALL the colors in the RGB color
 # space, a good solution is to convert an HSV color, in which value is held constant at FULL, into
 # RGB. For this we use the standard library colorsys. Colorsys is available in the standard Python 3
-# library and also within Blender's build in Python 3 environment.
+# libraries and also within Blender's built-in Python 3 environment.
 # See: https://en.wikipedia.org/wiki/HSL_and_HSV
 
 # See: /docs/sys_path_hack_in_boa_files.txt
@@ -41,23 +40,23 @@ importlib.reload(boablend.primitives.cube)
 
 ########################################## CONFIGURATION ###########################################
 
-
 # Camera Settings
 
 cube_corkscrew_camera_settings = {
-    'name': 'Cube Corkscrew Camera - INCORRECT SETTINGS',
-    'comment': 'boablend.Camera settings for the RGB Cube Tower project',
-    'scene.camera.location.x': 67.37174224853516,
-    'scene.camera.location.y': 62.108951568603516,
-    'scene.camera.location.z': -22.072437286376953,
-    'rot_eul0x_deg': 98.04878632691747,
-    'rot_eul1y_deg': 0.00013285419354253954,
-    'rot_eul2z_deg': -585.7637994372828,
+    'name': 'Cube Corkscrew Camera',
+    'comment': 'boablend.Camera settings for the cube_corkscrew boa',
+    'scene.camera.location.x': -41.7065,
+    'scene.camera.location.y': -40.3734,
+    'scene.camera.location.z': 39.6792,
+    'rot_eul0x_deg': 74.7548,
+    'rot_eul1y_deg': 0.622499,
+    'rot_eul2z_deg': -45.31,
     'render_resolution_x': 854,
     'render_resolution_y': 480,
-    'scene.camera.data.angle': 88.22523942116491
+    'scene.camera.data.angle': 100.38885695056194,
+    'scene.camera.data.clip_start': 0.1,
+    'scene.camera.data.clip_end': 300
 }
-
 
 # Corkscrew Structure Settings
 default_corkscrew = {
@@ -65,7 +64,7 @@ default_corkscrew = {
     'screw_pitch': 16,
     'screw_full_rotations': 18,
     'cube_interval': 15,
-    'screw_height_offset': 80,
+    'screw_height_offset': 50,
     'axis_align_cubes': True
 }
 
@@ -114,7 +113,6 @@ inter_cube_height_delta = screw_pitch / intervals_per_rotation
 # simulation and animation.
 screw_height_offset = current_corkscrew['screw_height_offset']
 
-
 # Cube dimensions
 cube_size = 2
 
@@ -143,7 +141,6 @@ corkscrew_cube_defaults = {
 
 ########################################## MAIN EXECUTION ##########################################
 
-
 # Instantiate a boablend logger instance.
 logger = boablend.util.Logger()
 
@@ -152,45 +149,69 @@ logger.dump_environment_info()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+# Deselect all in case something unexpected is selected in the blend file.
+bpy.ops.object.select_all(action='DESELECT')
+
 # Select and then delete the default cube.
 bpy.data.objects['Cube'].select_set(True)
 bpy.ops.object.delete()  # This will delete all selected objects, so make sure of what is selected.
 
+# Select and then delete the default light.
+bpy.data.objects['Light'].select_set(True)
+bpy.ops.object.delete()
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Camera Setup for this project.
+# Camera Setup
 
 # New instance of boablend.Camera with default boablend settings:
 main_camera = boablend.camera.Camera()
-# Optionally, we could apply desired settings at the time of instantiation:
-#main_camera = boablend.camera.Camera(cam=cube_corkscrew_camera_settings)
-boablend_default_camera_settings = main_camera.get()
-logger.log('Boablend camera class default camera settings:')
-logger.dump(boablend_default_camera_settings)
 
-# Note that the boablend default camera settings are not the same as Blender's.
-# Right now we have boablend's stored in the instance but next we will retreive Blender's.
-# Just above here we did look at boablend's default camera settings by using main_camera.get().
-# But what we will do next is main_camera.read(), which retrieves and stores Blender's settings.
-
-# First before changing any camera settings and for illustrative purposes, let's retrieve the
-# current (default) camera settings from the blend file and dump them to the log.
-# Read the active camera settings in the current blend file and store them in this instance.
-# The camera.read() method also returns the settings/attributes dictionary.
-blender_default_camera_settings = main_camera.read()
-logger.log('Blender initial/default camera settings:')
-logger.dump(blender_default_camera_settings)
+# After manually positioning and adjusting the main camera for the desired results, use the
+# following camera.read() code to capture those camera settings from the blend file and dump them
+# to the log. Then copy those settings into the camera settings dictionary near the top of this Boa
+# file. Once this is done, disable this block of code and allow the Boa file to set the camera using
+# the camera.write() code below here.
+# In the future this process will be more streamlined and automated.
+#camera_settings_read_from_blend_file = main_camera.read()
+#logger.log('Camera settings obtained from Blender GUI:')
+#logger.dump(camera_settings_read_from_blend_file)
 
 # Next we store the settings we will need for rgb_cube_tower into this camera instance, but note
 # that they will not be applied (written) to the blend file until we explicitly do so.
 main_camera.store(cube_corkscrew_camera_settings)
-# Now 'write' them to the blend file, thus applied and take effect:
+# Now 'write' them to the blend file, thus they are applied and take effect:
 main_camera.write()
-# Now, we can simply 'get' the settings back from the instance without causing anything to happen,
-# such as if we used read() .. which would take the settings from the blend file first.
-current_stored_camera_settings = main_camera.get()
-logger.log('RGB cube tower camera settings:')
-logger.dump(current_stored_camera_settings)
+
+# NOTE: Make sure to disable the above two lines of camera.write() code when performing the read()
+# steps. Also, after the camera.read() steps, disable that code and re-enable the write code.
+
+# TODO: Consider putting the camera.read() vs. camera.write() steps and their comments into
+# distinct functions so that they can be more easily and clearly isolated from each other and
+# executed correctly from a single point.
+# BUT .. once the Boa is developed .. the read steps may never be needed again. Perhaps we need to
+# make different kinds of Boas .. finished 'recipe' Boas vs. tutorial/template Boas for people to
+# use to develop their own unique Boas.
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Lighting Setup
+
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Physics Setup - Scene, Rigid Body World Setup
+
+bpy.context.space_data.context = 'SCENE'
+bpy.context.scene.rigidbody_world.steps_per_second = 300
+bpy.context.scene.frame_start = 1
+bpy.context.scene.frame_end = 700
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Animation Setup
+
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

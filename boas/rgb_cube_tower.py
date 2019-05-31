@@ -5,7 +5,6 @@
 
 ####################################################################################################
 import bpy  # This import works when executing within Blender but will show an import error in IDEs.
-# Regarding import errors showing in your IDE for 'import bpy':
 # See: /docs/import_bpy_error_in_ide.txt
 ####################################################################################################
 
@@ -33,7 +32,6 @@ importlib.reload(boablend.primitives.cube)
 
 ########################################## CONFIGURATION ###########################################
 
-
 # Camera Settings
 
 # These camera settings are optimal for the animation of the tower falling and shattering and were
@@ -53,9 +51,10 @@ rgb_cube_tower_camera_settings = {
     'rot_eul2z_deg': -585.7637994372828,
     'render_resolution_x': 854,
     'render_resolution_y': 480,
-    'scene.camera.data.angle': 88.22523942116491
+    'scene.camera.data.angle': 88.22523942116491,
+    'scene.camera.data.clip_start': 0.1,
+    'scene.camera.data.clip_end': 1000
 }
-
 
 # Tower/Cube Settings
 
@@ -114,7 +113,6 @@ rgb_tower_cube_template = {
 
 ########################################## MAIN EXECUTION ##########################################
 
-
 # Instantiate a boablend logger instance.
 logger = boablend.util.Logger()
 
@@ -155,7 +153,7 @@ logger.dump(blender_default_camera_settings)
 # Next we store the settings we will need for rgb_cube_tower into this camera instance, but note
 # that they will not be applied (written) to the blend file until we explicitly do so.
 main_camera.store(rgb_cube_tower_camera_settings)
-# Now 'write' them to the blend file, thus applied and take effect:
+# Now 'write' them to the blend file, thus they are applied and take effect:
 main_camera.write()
 # Now, we can simply 'get' the settings back from the instance without causing anything to happen,
 # such as if we used read() .. which would take the settings from the blend file first.

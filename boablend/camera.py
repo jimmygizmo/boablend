@@ -25,7 +25,9 @@ default_camera = {
                 'rot_eul2z_deg': 0.0,
                 'render_resolution_x': 1920,
                 'render_resolution_y': 1080,
-                'scene.camera.data.angle': 49.134342133748646
+                'scene.camera.data.angle': 49.134342133748646,
+                'scene.camera.data.clip_start': 0.1,
+                'scene.camera.data.clip_end': 300
             }
 
 
@@ -76,6 +78,10 @@ class Camera:
         # Camera FOV - Degrees
         scene.camera.data.angle = self.cam['scene.camera.data.angle']*CONST.DEG_TO_EUL_FACTOR
 
+        # Camera Clipping
+        scene.camera.data.clip_start = self.cam['scene.camera.data.clip_start']
+        scene.camera.data.clip_end = self.cam['scene.camera.data.clip_end']
+
         # Render Resolution / Aspect Ratio
         scene.render.resolution_x = self.cam['render_resolution_x']
         scene.render.resolution_y = self.cam['render_resolution_y']
@@ -106,12 +112,16 @@ class Camera:
 
         scene = bpy.data.scenes["Scene"]
 
+        # Camera FOV - Obtained as Euler values, Stored as Degrees.
+        self.cam['scene.camera.data.angle'] = scene.camera.data.angle*CONST.EUL_TO_DEG_FACTOR
+
+        # Camera Clipping
+        self.cam['scene.camera.data.clip_start'] = scene.camera.data.clip_start
+        self.cam['scene.camera.data.clip_end'] = scene.camera.data.clip_end
+
         # Render Resolution / Aspect Ratio
         self.cam['render_resolution_x'] = scene.render.resolution_x
         self.cam['render_resolution_y'] = scene.render.resolution_y
-
-        # Camera FOV - Obtained as Euler values, Stored as Degrees.
-        self.cam['scene.camera.data.angle'] = scene.camera.data.angle*CONST.EUL_TO_DEG_FACTOR
 
         return self.cam
 
