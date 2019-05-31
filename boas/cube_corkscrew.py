@@ -198,6 +198,25 @@ main_camera.write()
 # Lighting Setup
 
 bpy.ops.object.light_add(type='SUN', radius=1, location=(0, 0, 0))
+#bpy.data.objects['Sun'].select_set(True)  # Had to select it for the context to be correct for the
+# following operation to set the strength.
+bpy.context.object.data.energy = 7
+
+bpy.context.object.location[0] = -27.9868
+bpy.context.object.location[1] = 0
+bpy.context.object.location[2] = 50.21
+bpy.context.object.rotation_euler[0] = -0.284267
+bpy.context.object.rotation_euler[1] = -0.246545
+bpy.context.object.rotation_euler[2] = 0.138655
+
+# Loc:
+# X -27.9868m
+# Y 0
+# Z 50.21m
+# Rot:
+# X -16.2873d
+# Y -14.126d
+# Z 7.94436d
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -207,7 +226,6 @@ bpy.ops.object.light_add(type='SUN', radius=1, location=(0, 0, 0))
 bpy.ops.rigidbody.world_add()
 bpy.data.scenes['Scene'].rigidbody_world.steps_per_second = 500
 bpy.context.scene.frame_end = 680
-
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
