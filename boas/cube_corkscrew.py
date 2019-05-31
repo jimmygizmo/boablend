@@ -45,8 +45,8 @@ importlib.reload(boablend.primitives.cube)
 cube_corkscrew_camera_settings = {
     'name': 'Cube Corkscrew Camera',
     'comment': 'boablend.Camera settings for the cube_corkscrew boa',
-    'scene.camera.location.x': -41.7065,
-    'scene.camera.location.y': -40.3734,
+    'scene.camera.location.x': -42.9565,
+    'scene.camera.location.y': -41.8034,
     'scene.camera.location.z': 39.6792,
     'rot_eul0x_deg': 74.7548,
     'rot_eul1y_deg': 0.622499,
@@ -61,8 +61,8 @@ cube_corkscrew_camera_settings = {
 # Corkscrew Structure Settings
 default_corkscrew = {
     'screw_radius': 14,
-    'screw_pitch': 16,
-    'screw_full_rotations': 18,
+    'screw_pitch': 18,
+    'screw_full_rotations': 22,
     'cube_interval': 15,
     'screw_height_offset': 50,
     'axis_align_cubes': True
@@ -197,16 +197,18 @@ main_camera.write()
 
 # Lighting Setup
 
+bpy.ops.object.light_add(type='SUN', radius=1, location=(0, 0, 0))
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Physics Setup - Scene, Rigid Body World Setup
 
-bpy.context.space_data.context = 'SCENE'
-bpy.context.scene.rigidbody_world.steps_per_second = 300
-bpy.context.scene.frame_start = 1
-bpy.context.scene.frame_end = 700
+bpy.ops.rigidbody.world_add()
+bpy.data.scenes['Scene'].rigidbody_world.steps_per_second = 500
+bpy.context.scene.frame_end = 680
+
+
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -319,7 +321,7 @@ while (not total_angle > completion_angle):
         'current_y_position': current_y_position,
         'current_z_position': current_z_position
     }
-    logger.dump(state)
+    #logger.dump(state)
     cube_maker.create()
     # Calcualtions for next iteration:
     angle += cube_interval
@@ -331,6 +333,19 @@ while (not total_angle > completion_angle):
     # For debugging, would like to watch the cubes being created
     #bpy.context.view_layer.update()  # Does not appear to be causing the view to update as desired
     #time.sleep(1)
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+#bpy.context.area.type = 'PROPERTIES'
+# The above line appears to work, but we still are getting a context error when we try to bake:
+# RuntimeError: Operator bpy.ops.ptcache.bake.poll() failed, context is incorrect
+
+#bpy.ops.rigidbody.bake_to_keyframes(frame_start=1, frame_end=600, step=1)
+# No I don't think we want to bake to keyframes .. just trying to trigger a standard bake.
+# Having trouble finding a way to set the end_frame for the Simulation/Bake.
+#bpy.ops.ptcache.bake(bake=True)
+
 
 
 ##
