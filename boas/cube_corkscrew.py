@@ -27,6 +27,7 @@ if not dir in sys.path:
 import boablend.camera
 import boablend.util
 import boablend.constants as CONST
+import boablend.light.sun
 import boablend.primitive.cube
 
 # See: /docs/use_of_importlib_reload.txt
@@ -35,13 +36,13 @@ importlib.reload(boablend)
 importlib.reload(boablend.camera)
 importlib.reload(boablend.util)
 importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
+importlib.reload(boablend.light.sun)
 importlib.reload(boablend.primitive.cube)
 
 
 ########################################## CONFIGURATION ###########################################
 
 # Camera Settings
-
 cube_corkscrew_camera_settings = {
     'name': 'Cube Corkscrew Camera',
     'comment': 'boablend.Camera settings for the cube_corkscrew boa',
@@ -58,6 +59,41 @@ cube_corkscrew_camera_settings = {
     'scene.camera.data.clip_end': 300
 }
 
+# Light Settings
+cube_corkscrew_light_settings = {
+    'name': 'Sun',
+    'comment': 'boablend.light.sun settings for the cube_corkscrew boa',
+    'radius': 1,
+    'energy': 7,
+    'location.x': -24.6268,
+    'location.y': 14.53,
+    'location.z': 50.21,
+    'rot_eul0x_deg': -41.9041,
+    'rot_eul1y_deg': -27.3757,
+    'rot_eul2z_deg': 14.7018
+}
+
+# Cube dimensions
+cube_size = 2
+
+# Cube with Physics Settings
+corkscrew_cube_defaults = {
+    'xloc': 0,
+    'yloc': 0,
+    'zloc': 0,
+    'size': cube_size,
+    'mass': 20,
+    'collision_shape': 'BOX',
+    'friction': 1,
+    'use_margin': True,
+    'collision_margin': 0,
+    'linear_damping': 0.35,
+    'angular_damping': 0.6,
+    'color_x': 0.5,
+    'color_y': 0.5,
+    'color_z': 0.5
+}
+
 # Corkscrew Structure Settings
 default_corkscrew = {
     'screw_radius': 14,
@@ -69,6 +105,7 @@ default_corkscrew = {
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 current_corkscrew = default_corkscrew
 
@@ -113,27 +150,6 @@ inter_cube_height_delta = screw_pitch / intervals_per_rotation
 # simulation and animation.
 screw_height_offset = current_corkscrew['screw_height_offset']
 
-# Cube dimensions
-cube_size = 2
-
-# Default cube attributes
-corkscrew_cube_defaults = {
-    'xloc': 0,
-    'yloc': 0,
-    'zloc': 0,
-    'size': cube_size,
-    'mass': 20,
-    'collision_shape': 'BOX',
-    'friction': 1,
-    'use_margin': True,
-    'collision_margin': 0,
-    'linear_damping': 0.35,
-    'angular_damping': 0.6,
-    'color_x': 0.5,
-    'color_y': 0.5,
-    'color_z': 0.5
-}
-
 
 ################################## FUNCTION AND CLASS DEFINITIONS ##################################
 
@@ -143,9 +159,6 @@ corkscrew_cube_defaults = {
 
 # Instantiate a boablend logger instance.
 logger = boablend.util.Logger()
-
-# Dump current environment info, just for illustrative purposes:
-logger.dump_environment_info()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -195,24 +208,19 @@ main_camera.write()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Lighting Setup
-# TODO: Add lighting support to boablend in a new sub-module.
+# Lighting
 
-bpy.ops.object.light_add(type='SUN', radius=1, location=(0, 0, 0))
-#bpy.data.objects['Sun'].select_set(True)  # Turns out not necessary to select it in this case.
-bpy.context.object.data.energy = 7
-
-bpy.context.object.location[0] = -24.6268
-bpy.context.object.location[1] = 14.53
-bpy.context.object.location[2] = 50.21
-bpy.context.object.rotation_euler[0] = -41.9041 * CONST.DEG_TO_EUL_FACTOR
-bpy.context.object.rotation_euler[1] = -27.3757 * CONST.DEG_TO_EUL_FACTOR
-bpy.context.object.rotation_euler[2] = 14.7018 * CONST.DEG_TO_EUL_FACTOR
-
+sun_maker = boablend.light.sun.Sun(sun=cube_corkscrew_light_settings)
+sun_maker.create()
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Background Color - Pure White
+
+# TODO: Try this first:
+#bpy.context.scene.render.engine = 'CYCLES'
+# FROM:
+# https://blender.stackexchange.com/questions/32758/how-to-set-a-background-using-the-cycles-render-engine-with-the-api
 
 # bpy.context.space_data.context = 'WORLD'  # Nope
 #bpy.data.node_groups["Shader Nodetree"].nodes["Background"].inputs[0].default_value = (1, 1, 1, 1)
@@ -228,13 +236,7 @@ bpy.context.object.rotation_euler[2] = 14.7018 * CONST.DEG_TO_EUL_FACTOR
 
 bpy.ops.rigidbody.world_add()
 bpy.data.scenes['Scene'].rigidbody_world.steps_per_second = 500
-bpy.context.scene.frame_end = 680
-
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Animation Setup
-
+bpy.context.scene.frame_end = 650
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -294,6 +296,7 @@ blue = 0
 
 # To be used for inner-loop logging.
 state = {}
+
 
 # Iterate until angle exceeds completion_angle, meaning angle = completion_angle will be included.
 while (not total_angle > completion_angle):
@@ -361,6 +364,8 @@ while (not total_angle > completion_angle):
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+# Bake Physics/Animation Calculations
+
 #bpy.context.area.type = 'PROPERTIES'
 # The above line appears to work, but we still are getting a context error when we try to bake:
 # RuntimeError: Operator bpy.ops.ptcache.bake.poll() failed, context is incorrect
@@ -369,7 +374,6 @@ while (not total_angle > completion_angle):
 # No I don't think we want to bake to keyframes .. just trying to trigger a standard bake.
 # Having trouble finding a way to set the end_frame for the Simulation/Bake.
 #bpy.ops.ptcache.bake(bake=True)
-
 
 
 ##
