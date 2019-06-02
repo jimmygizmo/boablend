@@ -1,0 +1,45 @@
+
+####################################################################################################
+BOA: rgb_cube_tower - Remaining Manual Steps
+####################################################################################################
+
+Theoretically it should be possible to automate every single step required to make a final
+animation rendering for this boa. In practice though, it can sometimes be
+very difficult to figure out how to use the Blender Python API. This is one reason Boablend
+exists. Also, since a lot of things changed between Blender version 2.79 and 2.80, it could be
+that some minor bugs still exist in the Blender 2.80 Python API .. I don't know for sure.
+
+Anyhow, this Boa will automate 99% of all the work required to make the final animation,
+leaving just a few minor steps left which must be done manually in the Blender GUI. These steps
+should be done after running the boa file.
+
+1. Set the world background color.
+- Select the 'World' tab in the properties area.
+- Click on 'Background' to change the color.
+- Set it to pure white.
+
+2. Set the end_frame for baking the physics. (Thich is not the end_frame for the animation.
+The boa file sets the animation end_frame fine. The problem is setting the physics Bake
+end_frame.)
+- Select the 'Scene' tab in the properties area.
+- Select 'Rigid Body World'.
+- Select 'Cache'.
+- In the 'End' field, set the value to 650, which is the same as the animation's end_frame value.
+- Click 'Bake'.
+
+3. Set your desired Render Output settings. You might want some different settings, but these
+should work well for you:
+- Select the 'Render' tab in the properties area.
+- Set the 'Render Engine' to 'Cycles'.
+- Select the 'Output' tab in the properties area.
+- UN-check 'Overwrite'.
+- Make sure 'File Format' is set to 'PNG'
+- In the 'Output' sub-section of the 'Output' tab, set your output path.
+
+
+That's it. Everything else was handled by the Boa file. The goal with Boablend is to be
+able to automate everything, so as Boablend evolves, the above manual steps should eventually
+move into Python code.
+
+##
+#

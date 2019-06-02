@@ -1,6 +1,9 @@
 
 ####################################################################################################
 # BOA: cube_corkscrew
+# A few small steps are proving difficult to automate. Please read the following for instructions
+# on any steps you need to perform manually in the Blender GUI prior to rendering the animation.
+# See: /boas/cube_corkscrew_info.txt
 ####################################################################################################
 
 ####################################################################################################
