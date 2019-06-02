@@ -6,6 +6,7 @@ import bpy  # This import works when executing within Blender but will show an i
 ####################################################################################################
 
 import boablend.constants as CONST
+import math
 
 # Cube dimensions
 # NOTE: These may actually belong in client code and we can just pick a default value for the
@@ -21,6 +22,9 @@ default_cube = {
     'xloc': 0,
     'yloc': 0,
     'zloc': 0,
+    'rot_eul0x_deg': 0.0,
+    'rot_eul1y_deg': 0.0,
+    'rot_eul2z_deg': 0.0,
     'size': default_cube_size,
     'mass': 20,
     'collision_shape': 'BOX',
@@ -56,7 +60,12 @@ class Cube:
         # Create the mesh object.
         bpy.ops.mesh.primitive_cube_add(
             size = self.cube['size'],
-            location = (self.cube['xloc'], self.cube['yloc'], self.cube['zloc'])
+            location = (self.cube['xloc'], self.cube['yloc'], self.cube['zloc']),
+            rotation = (
+                math.radians(self.cube['rot_eul0x_deg']),
+                math.radians(self.cube['rot_eul1y_deg']),
+                math.radians(self.cube['rot_eul2z_deg'])
+            )
         )
 
         # Add and adjust the physics.

@@ -2,6 +2,7 @@
 
 # Render output
 out/
+out2/
 
 # We DO track .vscode settings, but not the launch/run settings currently:
 .vscode/launch.json
