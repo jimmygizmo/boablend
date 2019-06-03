@@ -13,7 +13,7 @@ verbose = True
 boadir = 'boas'
 
 #default_boa = 'rgb_cube_tower.py'
-default_boa = 'cube_corkscrew_special.py'
+default_boa = 'cube_corkscrew_deluxe.py'
 boa_sub_path = os.path.join(boadir, default_boa)
 boapath = bpy.path.abspath("//{}".format(boa_sub_path))
 
