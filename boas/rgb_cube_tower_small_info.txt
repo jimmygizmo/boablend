@@ -1,0 +1,14 @@
+
+####################################################################################################
+BOA: rgb_cube_tower_small - Remaining Manual Steps
+####################################################################################################
+
+This boa is simply a small version of rgb_cube_tower to be used during development of boablend
+because it runs much faster and the goal is to test code changes, not actually make an animation.
+
+For the actual instructions on manual steps to make an animation from this boa, please see:
+rgb_cube_tower_into.txt
+
+
+##
+#

@@ -75,15 +75,15 @@ rgb_cube_tower_camera_settings = {
 
 # Dimensions of the tower of cubes as number of cubes.
 # The 8x8x24 dimensions are what were used in the linked YouTube video.
-cubes_x_width = 8
-cubes_y_depth = 8
-cubes_z_height = 24
+# cubes_x_width = 8
+# cubes_y_depth = 8
+# cubes_z_height = 24
 # 8x8x24 takes about 10 minutes to run.
 #
 # For rapid dev/test iterations, 4x4x6 runs in a few seconds:
-#cubes_x_width = 4
-#cubes_y_depth = 4
-#cubes_z_height = 6
+cubes_x_width = 4
+cubes_y_depth = 4
+cubes_z_height = 6
 
 # Cube dimensions
 cube_size = 2
