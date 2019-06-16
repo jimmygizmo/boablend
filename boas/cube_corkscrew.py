@@ -298,8 +298,8 @@ state = {}
 while (not total_angle > completion_angle):
     angle_ratio = angle / 360
     total_angle_ratio = total_angle / completion_angle
-    current_x_position = screw_radius * math.cos(angle * CONST.DEG_TO_EUL_FACTOR)
-    current_y_position = screw_radius * math.sin(angle * CONST.DEG_TO_EUL_FACTOR)
+    current_x_position = screw_radius * math.cos(math.radians(angle))
+    current_y_position = screw_radius * math.sin(math.radians(angle))
     current_z_position = (cube_number * inter_cube_height_delta) + screw_height_offset
     # TODO: Probably want to make a setter that takes a 3-field tuple for location, like we did for
     # color.

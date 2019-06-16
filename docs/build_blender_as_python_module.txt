@@ -1,0 +1,31 @@
+
+Building blender as a Python module means you can import it into your Python code which
+is running externally from Blender, meaning not running inside of a Text object by clicking
+"Run Script".
+
+Within Boablend there are many references to 'external execution model' and this is what
+is meant. The concept is that you never launch Blender in the usual sense, rather you
+just run Python code and the Blender application is started via a blender module which
+has been imported into your code.
+
+This is not officially supported, but here is the best documentation currently available on
+the topic:
+https://archive.blender.org/wiki/index.php/User:Ideasman42/BlenderAsPyModule/
+
+Since Blender 2.8 is brand new and actually still in Beta at the time of this writing,
+there are additional questions and potential challenges about the success of such a
+proposal.
+
+I am going to attempt it, and make notes of my progress here.
+
+--------------------------------------------------------------------------------------------
+
+One note concerns me:
+"This is mainly limited to features which can be usable in background mode, so you cant for
+instance do OpenGL preview renders."
+So it might be that the context required for certain actions may not be available with this
+approach.
+
+For building Blender from source (oriented towards Linux):
+https://wiki.blender.org/wiki/Building_Blender/Linux/Ubuntu
+
