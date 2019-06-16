@@ -1,6 +1,7 @@
 
 ####################################################################################################
 
+from . import config
 from . import primitive
 from . import light
 from . import camera
@@ -10,6 +11,7 @@ from . import constants
 from . import util
 
 __all__ = [
+    'config',
     'primitive',
     'light',
     'camera',

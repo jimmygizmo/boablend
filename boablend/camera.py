@@ -4,7 +4,7 @@ import bpy  # This import works when executing within Blender but will show an i
 # /docs/import_bpy_error_in_ide.txt
 ####################################################################################################
 
-import boablend.constants as CONST
+import math
 
 # These default_camera settings are stored in a new Camera instance when no such settings are
 # supplied to the Camera constructor. These settings are not particularly useful since they
@@ -70,12 +70,12 @@ class Camera:
 
         # Camera Rotation - Degrees - Rotation Mode: 'XYZ Euler'/'XYZ'
         scene.camera.rotation_mode = 'XYZ'
-        scene.camera.rotation_euler[0] = self.cam['rot_eul0x_deg']*CONST.DEG_TO_EUL_FACTOR
-        scene.camera.rotation_euler[1] = self.cam['rot_eul1y_deg']*CONST.DEG_TO_EUL_FACTOR
-        scene.camera.rotation_euler[2] = self.cam['rot_eul2z_deg']*CONST.DEG_TO_EUL_FACTOR
+        scene.camera.rotation_euler[0] = math.radians(self.cam['rot_eul0x_deg'])
+        scene.camera.rotation_euler[1] = math.radians(self.cam['rot_eul1y_deg'])
+        scene.camera.rotation_euler[2] = math.radians(self.cam['rot_eul2z_deg'])
 
         # Camera FOV - Degrees
-        scene.camera.data.angle = self.cam['scene.camera.data.angle']*CONST.DEG_TO_EUL_FACTOR
+        scene.camera.data.angle = math.radians(self.cam['scene.camera.data.angle'])
 
         # Camera Clipping
         scene.camera.data.clip_start = self.cam['scene.camera.data.clip_start']
@@ -105,14 +105,14 @@ class Camera:
 
         # Camera Rotation - Degrees - Rotation Mode: 'XYZ Euler'/'XYZ'
         # Obtained as Euler values, Stored as Degrees.
-        self.cam['rot_eul0x_deg'] = obj.rotation_euler[0]*CONST.EUL_TO_DEG_FACTOR
-        self.cam['rot_eul1y_deg'] = obj.rotation_euler[1]*CONST.EUL_TO_DEG_FACTOR
-        self.cam['rot_eul2z_deg'] = obj.rotation_euler[2]*CONST.EUL_TO_DEG_FACTOR
+        self.cam['rot_eul0x_deg'] = math.degrees(obj.rotation_euler[0])
+        self.cam['rot_eul1y_deg'] = math.degrees(obj.rotation_euler[1])
+        self.cam['rot_eul2z_deg'] = math.degrees(obj.rotation_euler[2])
 
         scene = bpy.data.scenes["Scene"]
 
         # Camera FOV - Obtained as Euler values, Stored as Degrees.
-        self.cam['scene.camera.data.angle'] = scene.camera.data.angle*CONST.EUL_TO_DEG_FACTOR
+        self.cam['scene.camera.data.angle'] = math.degrees(scene.camera.data.angle)
 
         # Camera Clipping
         self.cam['scene.camera.data.clip_start'] = scene.camera.data.clip_start
