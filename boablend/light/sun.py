@@ -1,10 +1,11 @@
 
 ####################################################################################################
+
 import bpy  # This import works when executing within Blender but will show an import error in IDEs.
 # /docs/import_bpy_error_in_ide.txt
-####################################################################################################
 
-import boablend.constants as CONST
+#import boablend.constants as CONST
+import math
 
 default_sun = {
                 'name': 'Sun',
@@ -54,9 +55,9 @@ class Sun:
         bpy.context.object.location[2] = self.sun['location.z']
 
         # Rotation - Stored in degrees, assigned in radians
-        bpy.context.object.rotation_euler[0] = self.sun['rot_eul0x_deg'] * CONST.DEG_TO_EUL_FACTOR
-        bpy.context.object.rotation_euler[1] = self.sun['rot_eul1y_deg'] * CONST.DEG_TO_EUL_FACTOR
-        bpy.context.object.rotation_euler[2] = self.sun['rot_eul2z_deg'] * CONST.DEG_TO_EUL_FACTOR
+        bpy.context.object.rotation_euler[0] = math.radians(self.sun['rot_eul0x_deg'])
+        bpy.context.object.rotation_euler[1] = math.radians(self.sun['rot_eul1y_deg'])
+        bpy.context.object.rotation_euler[2] = math.radians(self.sun['rot_eul2z_deg'])
 
     def read(self):
         """The boablend.light.sun.read() method is not yet implemented."""

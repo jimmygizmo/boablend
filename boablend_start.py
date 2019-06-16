@@ -1,10 +1,8 @@
 
 ####################################### BOABLEND ENTRY POINT #######################################
 
-####################################################################################################
 import bpy  # This import works when executing within Blender but will show an import error in IDEs.
 # /docs/import_bpy_error_in_ide.txt
-####################################################################################################
 
 import os
 

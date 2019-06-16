@@ -1,12 +1,12 @@
 
 ####################################################################################################
 # BOA: rgb_cube_tower_small
-####################################################################################################
+# A few small steps are proving difficult to automate. Please read the following for instructions
+# on any steps you need to perform manually in the Blender GUI prior to rendering the animation.
+# See: /boas/rgb_cube_tower_small.txt
 
-####################################################################################################
 import bpy  # This import works when executing within Blender but will show an import error in IDEs.
 # See: /docs/import_bpy_error_in_ide.txt
-####################################################################################################
 
 import sys
 import os

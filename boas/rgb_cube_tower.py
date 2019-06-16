@@ -1,12 +1,12 @@
 
 ####################################################################################################
 # BOA: rgb_cube_tower
-####################################################################################################
+# A few small steps are proving difficult to automate. Please read the following for instructions
+# on any steps you need to perform manually in the Blender GUI prior to rendering the animation.
+# See: /boas/rgb_cube_tower.txt
 
-####################################################################################################
 import bpy  # This import works when executing within Blender but will show an import error in IDEs.
 # See: /docs/import_bpy_error_in_ide.txt
-####################################################################################################
 
 import sys
 import os
@@ -16,18 +16,19 @@ dir = os.path.dirname(bpy.data.filepath)
 if not dir in sys.path:
     sys.path.append(dir)
 
-import boablend.camera
-import boablend.util
-import boablend.constants as CONST
-import boablend.primitive.cube
+import boablend
+# import boablend.camera
+# import boablend.util
+# import boablend.constants as CONST
+# import boablend.primitive.cube
 
 # See: /docs/use_of_importlib_reload.txt
 import importlib
 importlib.reload(boablend)
-importlib.reload(boablend.camera)
-importlib.reload(boablend.util)
-importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
-importlib.reload(boablend.primitive.cube)
+# importlib.reload(boablend.camera)
+# importlib.reload(boablend.util)
+# importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
+# importlib.reload(boablend.primitive.cube)
 
 
 ########################################## CONFIGURATION ###########################################

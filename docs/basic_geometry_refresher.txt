@@ -1,0 +1,18 @@
+
+A refresher in basic geometry:
+Sine = Opposite / Hypotenuse = y / r
+Cosine = Adjacent / Hypotenuse = x / r
+Tangent = Opposite / Adjacent = y / x
+Hence:
+x = r * Cosine(degrees_angle)
+x = r * Sine(degrees_angle)
+
+x = r * math.cos(radian_angle)
+x = r * math.sin(radian_angle)
+
+For degrees/radians conversions, use:
+math.radians(angle_in_degrees)
+math.degrees(angle_in_radians)
+
+##
+#

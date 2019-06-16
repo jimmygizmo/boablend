@@ -1,9 +1,9 @@
 
 ####################################################################################################
+
 import bpy  # This import works when executing within Blender but will show an import error in IDEs.
 # Regarding import errors showing in your IDE for 'import bpy':
 # /docs/import_bpy_error_in_ide.txt
-####################################################################################################
 
 import boablend.constants as CONST
 import math

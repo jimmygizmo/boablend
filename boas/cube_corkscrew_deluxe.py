@@ -4,12 +4,9 @@
 # A few small steps are proving difficult to automate. Please read the following for instructions
 # on any steps you need to perform manually in the Blender GUI prior to rendering the animation.
 # See: /boas/cube_corkscrew_deluxe_info.txt
-####################################################################################################
 
-####################################################################################################
 import bpy  # This import works when executing within Blender but will show an import error in IDEs.
 # See: /docs/import_bpy_error_in_ide.txt
-####################################################################################################
 
 import sys
 import os
@@ -290,16 +287,8 @@ red = 0
 green = 0
 blue = 0
 
-# A refresher in basic geometry:
-# Sine = Opposite / Hypotenuse = y / r
-# Cosine = Adjacent / Hypotenuse = x / r
-# Tangent = Opposite / Adjacent = y / x
-# Hence:
-# x = r * Cosine(degrees_angle)
-# x = r * Sine(degrees_angle)
-#
-# x = r * math.cos(radian_angle)
-# x = r * math.sin(radian_angle)
+# For some basic math/geometry relevant to boas like this one, see:
+# /docs/basic_geometry_refresher.txt
 
 # To be used for inner-loop logging.
 state = {}
