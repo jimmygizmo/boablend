@@ -29,3 +29,75 @@ approach.
 For building Blender from source (oriented towards Linux):
 https://wiki.blender.org/wiki/Building_Blender/Linux/Ubuntu
 
+In general, how to build blender on Mac:
+https://wiki.blender.org/wiki/Building_Blender/Mac
+
+Get Cmake:
+https://cmake.org/download/
+* ACTUALLY - MAYBE NOT - Homebrew can install it which is preferred IMO.
+* Removing from Applications dir and disabling .bash_profile change.
+* Brew install was successful. REMOVE THE Get Cmake step above. Just use Homebrew.
+
+If interested. Cmake How To:
+https://www.cs.swarthmore.edu/~adanner/tips/cmake.php
+
+* Had to figure out where to but these important options:
+WITH_PYTHON_INSTALL=OFF
+WITH_PLAYER=OFF
+WITH_PYTHON_MODULE=ON
+
+* * * * * * * * * 
+OK - You have to set these where they exist in the file.
+Search for the above three settings in CMakeLists.txt. In my case only the third
+one needed a different value.
+
+Here is an important note on the last one:
+option(WITH_PYTHON_MODULE "Enable building as a python module which runs without a 
+user interface, like running regular blender in background mode (experimental, only 
+enable for development), installs to PYTHON_SITE_PACKAGES 
+(or CMAKE_INSTALL_PREFIX if WITH_INSTALL_PORTABLE is enabled)." ON)
+* * * * * * * * * 
+PYTHON_SITE_PACKAGES -- does not exist
+CMAKE_INSTALL_PREFIX -- set by the code in CMakeLists.txt and does not look like
+it can be changed.
+
+So we try a build ... 'make'
+
+Get an error. Looks like we are missing some libraries.
+--------------------------------------
+CMake Error at build_files/cmake/platform/platform_apple.cmake:42 (message):
+  Mac OSX requires pre-compiled libs at:
+  '/Users/bilbo/GITREPOS/blender/blender2.8/../lib/darwin'
+Call Stack (most recent call first):
+  CMakeLists.txt:847 (include)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/Users/bilbo/GITREPOS/blender/build_darwin/CMakeFiles/CMakeOutput.log".
+make: *** [all] Error 1
+------------------------------------------
+FROM:
+https://blenderartists.org/t/problem-building-blender-with-cmake/1144517
+
+Secondly, “Mac OSX requires pre-compiled libs”, that is, Blender builds on already
+compiled external libraries (like many other systems) that you have to download
+alone and set in the relevant pointed dir: “/Users/joelgodin/blender-build/blender/…/lib/darwin”
+Those libraries are hosted at the BF subversion page if I’m not mistaken.
+That should be: https://svn.blender.org/svnroot/bf-blender/trunk/lib/darwin/ 14 for Mac Os.
+
+-------------------------------------------------------------
+
+Giving up for now ..
+Next thing to try is to get those missing libs using svn.
+Also have an error from the buid attempt chaning some file or some files need
+to be cleaned out of the way from the failed build attempt.
+
+==============================================================
+
+
+
+
+
+
+
+
