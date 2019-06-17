@@ -10,8 +10,8 @@ verbose = True
 
 boadir = 'boas'
 
-default_boa = 'rgb_cube_tower_small.py'
-#default_boa = 'rgb_cube_tower.py'
+#default_boa = 'rgb_cube_tower_small.py'
+default_boa = 'rgb_cube_tower.py'
 #default_boa = 'cube_corkscrew.py'
 #default_boa = 'cube_corkscrew_deluxe.py'
 

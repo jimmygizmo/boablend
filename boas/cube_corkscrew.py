@@ -25,20 +25,10 @@ if not dir in sys.path:
     sys.path.append(dir)
 
 import boablend
-# import boablend.camera
-# import boablend.util
-# import boablend.constants as CONST
-# import boablend.light.sun
-# import boablend.primitive.cube
 
 # See: /docs/use_of_importlib_reload.txt
 import importlib
 importlib.reload(boablend)
-# importlib.reload(boablend.camera)
-# importlib.reload(boablend.util)
-# importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
-# importlib.reload(boablend.light.sun)
-# importlib.reload(boablend.primitive.cube)
 
 
 ########################################## CONFIGURATION ###########################################
@@ -301,11 +291,8 @@ while (not total_angle > completion_angle):
     current_x_position = screw_radius * math.cos(math.radians(angle))
     current_y_position = screw_radius * math.sin(math.radians(angle))
     current_z_position = (cube_number * inter_cube_height_delta) + screw_height_offset
-    # TODO: Probably want to make a setter that takes a 3-field tuple for location, like we did for
-    # color.
-    cube_maker.cube['xloc'] = current_x_position
-    cube_maker.cube['yloc'] = current_y_position
-    cube_maker.cube['zloc'] = current_z_position
+    location = (current_x_position, current_y_position, current_z_position)
+    cube_maker.set_location(location)
 
     # This color model is nice, but let's try using an HSV conversion so we can more easily get ALL
     # of the RGB colors.

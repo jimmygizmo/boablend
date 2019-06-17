@@ -17,18 +17,10 @@ if not dir in sys.path:
     sys.path.append(dir)
 
 import boablend
-# import boablend.camera
-# import boablend.util
-# import boablend.constants as CONST
-# import boablend.primitive.cube
 
 # See: /docs/use_of_importlib_reload.txt
 import importlib
 importlib.reload(boablend)
-# importlib.reload(boablend.camera)
-# importlib.reload(boablend.util)
-# importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
-# importlib.reload(boablend.primitive.cube)
 
 
 ########################################## CONFIGURATION ###########################################
@@ -203,12 +195,12 @@ for a in range(0, cubes_z_height):
             #cube = cube_defaults  # Now using class. Instance already created. Will be resused.
             #color_y = (c + 1) / cubes_y_depth
             color_y = c / cubes_y_depth
-            cube_maker.cube['xloc'] = current_x_position + cube_side_length
-            cube_maker.cube['yloc'] = current_y_position - cube_side_length
-            cube_maker.cube['zloc'] = current_z_position - cube_side_length
-            # cube_maker.cube['color_x'] = color_x
-            # cube_maker.cube['color_y'] = color_y
-            # cube_maker.cube['color_z'] = color_z
+            location = (
+                current_x_position + cube_side_length,
+                current_y_position - cube_side_length,
+                current_z_position - cube_side_length
+            )
+            cube_maker.set_location(location)
             rgb_tuple = (color_x, color_y, color_z)
             cube_maker.set_color(rgb_tuple)
             cube_maker.create()

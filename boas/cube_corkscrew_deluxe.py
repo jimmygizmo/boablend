@@ -25,20 +25,10 @@ if not dir in sys.path:
     sys.path.append(dir)
 
 import boablend
-# import boablend.camera
-# import boablend.util
-# import boablend.constants as CONST
-# import boablend.light.sun
-# import boablend.primitive.cube
 
 # See: /docs/use_of_importlib_reload.txt
 import importlib
 importlib.reload(boablend)
-# importlib.reload(boablend.camera)
-# importlib.reload(boablend.util)
-# importlib.reload(boablend.constants)  # reload(CONST) works equally well. Use either.
-# importlib.reload(boablend.light.sun)
-# importlib.reload(boablend.primitive.cube)
 
 
 ########################################## CONFIGURATION ###########################################
