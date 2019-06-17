@@ -301,11 +301,8 @@ while (not total_angle > completion_angle):
     current_x_position = screw_radius * math.cos(math.radians(angle))
     current_y_position = screw_radius * math.sin(math.radians(angle))
     current_z_position = (cube_number * inter_cube_height_delta) + screw_height_offset
-    # TODO: Probably want to make a setter that takes a 3-field tuple for location, like we did for
-    # color.
-    cube_maker.cube['xloc'] = current_x_position
-    cube_maker.cube['yloc'] = current_y_position
-    cube_maker.cube['zloc'] = current_z_position
+    location = (current_x_position, current_y_position, current_z_position)
+    cube_maker.set_location(location)
     cube_maker.cube['rot_eul2z_deg'] = angle
 
     # This color model is nice, but let's try using an HSV conversion so we can more easily get ALL
