@@ -1,0 +1,37 @@
+
+####################################################################################################
+# About the 'vipers' directory.
+#
+# Vipers strike fast and direct and so we have named this directory and the scripts in it 'vipers'
+# in keeping with our serpent them, which of course begins with the fact that Python is such an
+# integral part of Blender. Hopefully everyone knows that Pythons and Boas and Vipers are snakes. :)
+#
+# Vipers are shell scripts which launch Blender from the command line and invoke Python code from
+# that point. This is a different mode of execution from using 'boas', which are currently only
+# executed from within the running Blender GUI by clicking 'Run Script' from a Text Object
+# containing the Boablend hook code (boablend_hook.py), which then reaches outside of Blender to
+# run 'boas', which leverage the boablend API from there.
+#
+# Boablend 'vipers' are experimental at this stage and we will see if this proves to be a good
+# execution model and what we can do with it. It might be best suited for background execution in
+# which there is no visible Blender GUI, or perhaps more, involving an observable GUI; we will see.
+#
+# At a later date if the word and concept of 'viper' makes more sense to be used elsewhere or if
+# these things seem to deserve a different name, then we will make that change at that time. It
+# would be too boring to simply call these 'blender_cmd_line_scripts' etc. because the shell
+# script will just perform the initial launch and embody command-line options. Rather this is a
+# whole different model of execution and organization of code and other resources, deserving of
+# its conceptually-linked name.
+#
+
+# Vipers will almost always have a bash script for setup and launching and a python script which
+# contains the code which potentially imports boablend libraries and performes the automation of
+# Blender. Both of these paired files will have '_vp' at the end of the filename to indicate they
+# are paired viper scripts and to differentiate them from boas and other scripts within Boablend
+# which might in some cases have similar names. For example:
+# background_job_vp.sh and background_job_vp.py
+#
+
+
+##
+#

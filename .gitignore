@@ -1,8 +1,9 @@
 # .gitignore - Boablend Python, Blender project.
 
-# Render output
+# Dirs for render output and temporary/example working files
 out/
 out2/
+tmp/
 
 # We DO track .vscode settings, but not the launch/run settings currently:
 .vscode/launch.json
