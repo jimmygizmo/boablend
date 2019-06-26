@@ -1,3 +1,11 @@
 {
-    "python.pythonPath": ".venv/bin/python"
+    "python.pythonPath": ".venv/bin/python3",
+    // ALT: "python.pythonPath":"${workspaceRoot}/.venv/bin/python",
+    "editor.tabSize": 4,
+    "editor.rulers": [79],
+    "workbench.tree.indent": 16,
+    "files.exclude": {
+        "**/LICENSE": true,
+        "**/LICENSE.txt": true
+      }
 }
