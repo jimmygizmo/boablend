@@ -1,20 +1,21 @@
-
-####################################################################################################
 # Project-specific Python dependencies
 
-# This requirements.txt file should be located in the root directory of this project/repository.
+# This requirements.txt file should be located in the root directory of this
+# project/repository.
 
 # There are two reasons why this requirements.txt file is currently empty:
 
-# 1. Currently there are no project-specific Python dependencies in use, which are not included in
-# the standard libraries of the version of Python embedded in Blender.
+# 1. Currently there are no project-specific Python dependencies in use, which
+# are not included in the standard libraries of the version of Python embedded
+# in Blender.
 #
-# TODO: This item could clarify internal vs. external execution and the build errors currently
+# TODO: This item could clarify internal vs. external execution and the build
+# errors currently
 # preventing external execution. Re-write it.
-# 2. This is a Blender project and at this initial stage, only Blender's built-in Python
-# environment will be used. Using this requirements.txt to install project dependencies with pip
-# will only become necessary once this project executes externally from the Blender application.
+# 2. This is a Blender project and at this initial stage, only Blender's
+# built-in Python
+# environment will be used. Using this requirements.txt to install project
+# dependencies with pip
+# will only become necessary once this project executes externally from the
+# Blender application.
 
-
-##
-#

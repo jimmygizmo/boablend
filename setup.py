@@ -10,6 +10,3 @@ setup(name='boablend',
       packages=['boablend'],
       zip_safe=False)
 
-
-      ##
-      #
