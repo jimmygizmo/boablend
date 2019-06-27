@@ -4,8 +4,10 @@
     "editor.tabSize": 4,
     "editor.rulers": [79],
     "workbench.tree.indent": 16,
+    "python.envFile": ".env",
     "files.exclude": {
         "**/LICENSE": true,
-        "**/LICENSE.txt": true
+        "**/LICENSE.txt": true,
+        "**/.gitattributes": true
       }
 }
