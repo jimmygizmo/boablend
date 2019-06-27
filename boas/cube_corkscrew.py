@@ -1,23 +1,25 @@
 
-####################################################################################################
+###############################################################################
 # BOA: cube_corkscrew
-# A few small steps are proving difficult to automate. Please read the following for instructions
-# on any steps you need to perform manually in the Blender GUI prior to rendering the animation.
+# A few small steps are proving difficult to automate. Please read the
+# following for instructions on any steps you need to perform manually in the
+# Blender GUI prior to rendering the animation.
 # See: /boas/cube_corkscrew_info.txt
 
-import bpy  # This import works when executing within Blender but will show an import error in IDEs.
-# See: /docs/import_bpy_error_in_ide.txt
+import bpy  # This import works when executing within Blender but will
+# show an import error in IDEs. See: /docs/import_bpy_error_in_ide.txt
 
 import sys
 import os
 import math
 import colorsys  # To convert HSV color to RGB color.
-# Our corkscrew most readily provides TWO dimensions of change to use to map RGB colors for coloring
-# each cube, with those being angle and height. To simplify mapping ALL the colors in the RGB color
-# space, a good solution is to convert an HSV color, in which value is held constant at FULL, into
-# RGB. For this we use the standard library colorsys. Colorsys is available in the standard Python 3
-# libraries and also within Blender's built-in Python 3 environment.
-# See: https://en.wikipedia.org/wiki/HSL_and_HSV
+# Our corkscrew most readily provides TWO dimensions of change to use to map
+# RGB colors for coloring each cube, with those being angle and height. To
+# simplify mapping ALL the colors in the RGB color space, a good solution is
+# to convert an HSV color, in which value is held constant at FULL, into RGB.
+# For this we use the standard library colorsys. Colorsys is available in the
+# standard Python 3 libraries and also within Blender's built-in Python 3
+# environment. See: https://en.wikipedia.org/wiki/HSL_and_HSV
 
 # See: /docs/sys_path_hack_in_boa_files.txt
 dir = os.path.dirname(bpy.data.filepath)
@@ -31,7 +33,7 @@ import importlib
 importlib.reload(boablend)
 
 
-########################################## CONFIGURATION ###########################################
+################################ CONFIGURATION ################################
 
 # Camera Settings
 cube_corkscrew_camera_settings = {
@@ -98,7 +100,7 @@ default_corkscrew = {
     'axis_align_cubes': True
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 current_corkscrew = default_corkscrew
@@ -110,104 +112,108 @@ screw_radius = current_corkscrew['screw_radius']
 screw_pitch = current_corkscrew['screw_pitch']
 
 # Number of full rotations in the corkscrew structure.
-# Later we could consider supporting partial rotations by allowing specification of the total
-# number of degrees to rotate through. The current design is to drive all calculations based
-# on the angle, in an iterative manner, so we could specify two full rotations by specifying
-# a total angular rotation of 360*2 = 720 etc. We will start with the simplest design by
-# specifying integer full rotations and then calculate a full multiple of 360 for our
-# 'completion_angle'
+# Later we could consider supporting partial rotations by allowing
+# specification of the total number of degrees to rotate through. The current
+# design is to drive all calculations based on the angle, in an iterative
+# manner, so we could specify two full rotations by specifying a total angular
+# rotation of 360*2 = 720 etc. We will start with the simplest design by
+# specifying integer full rotations and then calculate a full multiple of
+# 360 for our 'completion_angle'.
 screw_full_rotations = current_corkscrew['screw_full_rotations']
 
-# Calculate completion angle. It is useful to track the total_angle because it increases linearly
-# similar to cube_number and so it is also useful to calculate completion_angle to use as a
-# stopping point.
+# Calculate completion angle. It is useful to track the total_angle because it
+# increases linearly similar to cube_number and so it is also useful to
+# calculate completion_angle to use as a stopping point.
 completion_angle = screw_full_rotations * 360
 
 # Degrees of rotation separation between each cube.
 # IMPORTANT: This must divide equally into 360. e.g. 3, 15, 30, 45, 90, 180
-# This requiremnt may be relaxed in future designs, but we are keeping the math simple at first.
+# This requiremnt may be relaxed in future designs, but we are keeping the
+# math simple at first.
 cube_interval = current_corkscrew['cube_interval']  # Degrees
 
 # Calculate the intervals per rotation.
-intervals_per_rotation = 360 / cube_interval  # This needs to be an integer for now.
+intervals_per_rotation = 360 / cube_interval  # Needs to be an integer for now.
 
-# Calculate the height change/delta between consecutive cubes, using the screw pitch and the
-# intervals per rotation we just calculated.
+# Calculate the height change/delta between consecutive cubes, using the screw
+# pitch and the intervals per rotation we just calculated.
 inter_cube_height_delta = screw_pitch / intervals_per_rotation
 
-# Rotate each cube appropriately to keep the centerline parallel to a radius line.
-# i.e. keep the cube faces tangentially parallel to what would be the cylinder walls.
-# If this is false, all the cubes will be aligned the same with the world space XYZ axis.
+# Rotate each cube appropriately to keep the centerline parallel to a radius
+# line. i.e. keep the cube faces tangentially parallel to what would be the
+# cylinder walls. If this is false, all the cubes will be aligned the same
+# with the world space XYZ axis.
 #axis_align_cubes = True  # Currently not supported.
 
-# Height offset for the entire corkscrew, useful for setting the drop height for physics
-# simulation and animation.
+# Height offset for the entire corkscrew, useful for setting the drop height
+# for physics simulation and animation.
 screw_height_offset = current_corkscrew['screw_height_offset']
 
 
-################################## FUNCTION AND CLASS DEFINITIONS ##################################
-
-# No functions or classes are currently defined in this Boa file.
-
-########################################## MAIN EXECUTION ##########################################
+################################ MAIN EXECUTION ###############################
 
 # Instantiate a boablend logger instance.
 logger = boablend.util.Logger()
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Deselect all in case something unexpected is selected in the blend file.
 bpy.ops.object.select_all(action='DESELECT')
 
 # Select and then delete the default cube.
 bpy.data.objects['Cube'].select_set(True)
-bpy.ops.object.delete()  # This will delete all selected objects, so make sure of what is selected.
+# This will delete all selected objects, so make sure of what is selected:
+bpy.ops.object.delete()
 
 # Select and then delete the default light.
 bpy.data.objects['Light'].select_set(True)
 bpy.ops.object.delete()
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Camera Setup
 
 # New instance of boablend.Camera with default boablend settings:
 main_camera = boablend.camera.Camera()
 
-# After manually positioning and adjusting the main camera for the desired results, use the
-# following camera.read() code to capture those camera settings from the blend file and dump them
-# to the log. Then copy those settings into the camera settings dictionary near the top of this Boa
-# file. Once this is done, disable this block of code and allow the Boa file to set the camera using
-# the camera.write() code below here.
-# In the future this process will be more streamlined and automated.
+# After manually positioning and adjusting the main camera for the desired
+# results, use the following camera.read() code to capture those camera
+# settings from the blend file and dump them to the log. Then copy those
+# settings into the camera settings dictionary near the top of this Boa file.
+# Once this is done, disable this block of code and allow the Boa file to set
+# the camera using the camera.write() code below here. In the future this
+# process will be more streamlined and automated.
 #camera_settings_read_from_blend_file = main_camera.read()
 #logger.log('Camera settings obtained from Blender GUI:')
 #logger.dump(camera_settings_read_from_blend_file)
 
-# Next we store the settings we will need for rgb_cube_tower into this camera instance, but note
-# that they will not be applied (written) to the blend file until we explicitly do so.
+# Next we store the settings we will need for rgb_cube_tower into this camera
+# instance, but note that they will not be applied (written) to the blend file
+# until we explicitly do so.
 main_camera.store(cube_corkscrew_camera_settings)
 # Now 'write' them to the blend file, thus they are applied and take effect:
 main_camera.write()
 
-# NOTE: Make sure to disable the above two lines of camera.write() code when performing the read()
-# steps. Also, after the camera.read() steps, disable that code and re-enable the write code.
+# NOTE: Make sure to disable the above two lines of camera.write() code when
+# performing the read() steps. Also, after the camera.read() steps, disable
+# that code and re-enable the write code.
 
-# TODO: Consider putting the camera.read() vs. camera.write() steps and their comments into
-# distinct functions so that they can be more easily and clearly isolated from each other and
-# executed correctly from a single point.
-# BUT .. once the Boa is developed .. the read steps may never be needed again. Perhaps we need to
-# make different kinds of Boas .. finished 'recipe' Boas vs. tutorial/template Boas for people to
-# use to develop their own unique Boas.
+# TODO: Consider putting the camera.read() vs. camera.write() steps and their
+# comments into distinct functions so that they can be more easily and clearly
+# isolated from each other and executed correctly from a single point.
+# BUT .. once the Boa is developed .. the read steps may never be needed
+# again. Perhaps we need to make different kinds of Boas .. finished 'recipe'
+# Boas vs. tutorial/template Boas for people to use to develop their own
+# unique Boas.
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Lighting
 
 sun_maker = boablend.light.sun.Sun(sun=cube_corkscrew_light_settings)
 sun_maker.create()
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Background Color - Pure White
 
@@ -224,7 +230,7 @@ sun_maker.create()
 
 # Possible clue: https://blender.stackexchange.com/questions/39591/empty-bpy-data-node-groups
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Physics Setup - Scene, Rigid Body World Setup
 
@@ -232,14 +238,16 @@ bpy.ops.rigidbody.world_add()
 bpy.data.scenes['Scene'].rigidbody_world.steps_per_second = 500
 bpy.context.scene.frame_end = 650
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 cube_maker = boablend.primitive.cube.Cube(cube=corkscrew_cube_defaults)
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Create ground plane, scale it and assign physics attributes to it.
-bpy.ops.mesh.primitive_plane_add(size=2, enter_editmode=False, location=(0, 0, 0))
+bpy.ops.mesh.primitive_plane_add(size=2,
+                                 enter_editmode=False,
+                                 location=(0, 0, 0))
 # TODO: Certainly this scale can be simplified, probably to:
 #bpy.ops.transform.resize(value=(90, 90, 90))
 bpy.ops.transform.resize(value=(90, 90, 90),
@@ -258,15 +266,15 @@ bpy.context.object.rigid_body.collision_shape = 'MESH'
 bpy.context.object.rigid_body.collision_margin = 0
 
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 # Corkscrew Construction
 
 # Initialize the iteration variables
-current_z_position = 0
-current_x_position = 0
-current_z_position = 0
+zpos = 0
+xpos = 0
+zpos = 0
 angle = 0
 total_angle = 0
 rotation_number = 0  # This increments after every 360 degrees of rotation.
@@ -284,18 +292,19 @@ blue = 0
 state = {}
 
 
-# Iterate until angle exceeds completion_angle, meaning angle = completion_angle will be included.
+# Iterate until angle exceeds completion_angle, meaning
+# angle = completion_angle will be included.
 while (not total_angle > completion_angle):
     angle_ratio = angle / 360
     total_angle_ratio = total_angle / completion_angle
-    current_x_position = screw_radius * math.cos(math.radians(angle))
-    current_y_position = screw_radius * math.sin(math.radians(angle))
-    current_z_position = (cube_number * inter_cube_height_delta) + screw_height_offset
-    location = (current_x_position, current_y_position, current_z_position)
+    xpos = screw_radius * math.cos(math.radians(angle))
+    ypos = screw_radius * math.sin(math.radians(angle))
+    zpos = (cube_number * inter_cube_height_delta) + screw_height_offset
+    location = (xpos, ypos, zpos)
     cube_maker.set_location(location)
 
-    # This color model is nice, but let's try using an HSV conversion so we can more easily get ALL
-    # of the RGB colors.
+    # This color model is nice, but let's try using an HSV conversion so we
+    # can more easily get ALL of the RGB colors.
     #
     # # Red will cycle from zero to full each 360 degree rotation
     # red = angle_ratio
@@ -327,9 +336,9 @@ while (not total_angle > completion_angle):
         'rotation_number': rotation_number,
         'intervals_per_rotation': intervals_per_rotation,
         'inter_cube_height_delta': inter_cube_height_delta,
-        'current_x_position': current_x_position,
-        'current_y_position': current_y_position,
-        'current_z_position': current_z_position
+        'xpos': xpos,
+        'ypos': ypos,
+        'zpos': zpos
     }
     #logger.dump(state)
     cube_maker.create()
@@ -341,23 +350,24 @@ while (not total_angle > completion_angle):
         rotation_number += 1
         angle = angle - 360
     # For debugging, would like to watch the cubes being created
-    #bpy.context.view_layer.update()  # Does not appear to be causing the view to update as desired
+    # Does not appear to be causing the viewto update as desired:
+    #bpy.context.view_layer.update()
     #time.sleep(1)
 
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Bake Physics/Animation Calculations
 
 #bpy.context.area.type = 'PROPERTIES'
-# The above line appears to work, but we still are getting a context error when we try to bake:
-# RuntimeError: Operator bpy.ops.ptcache.bake.poll() failed, context is incorrect
+# The above line appears to work, but we still are getting a context error
+# when we try to bake:
+# RuntimeError: Operator bpy.ops.ptcache.bake.poll() failed, context is
+# incorrect.
 
 #bpy.ops.rigidbody.bake_to_keyframes(frame_start=1, frame_end=600, step=1)
-# No I don't think we want to bake to keyframes .. just trying to trigger a standard bake.
+# No I don't think we want to bake to keyframes .. just trying to trigger a
+# standard bake.
 # Having trouble finding a way to set the end_frame for the Simulation/Bake.
 #bpy.ops.ptcache.bake(bake=True)
 
-
-##
-#
