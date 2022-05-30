@@ -1,0 +1,54 @@
+
+Boablend is currently designed to work with Blender 2.8.
+As of Spring 2022, this Blender is now a few years old. (But still Amazing!)
+YOu should never be afraid of using older software version if all the features
+you need and more are still working fine in it.
+The internal Blender Python API does change and is mysterious and tricky to
+work with, so Boablend will not always be guaranteed to work on the latest
+version and will Boablend versions will be tied directly with specific
+Blender versions for this reason.
+
+In the near future, Boablend will be brought up to date to work with the
+current Blender release which is version 3.1.2, or likely higher by the
+time this work is done.
+
+BUT FOR NOW, you will need to use Boablend only with Blender 2.8 and this is no
+problem because Boablend does not try to push the limits of Blender and is
+most valuable for more straightforward geometric enjoyment and experimentation.
+
+Blender.org is great for support of old versions.
+You can get Blender 2.8 here:
+
+https://download.blender.org/release/Blender2.80/
+
+All OSes are supported at the above link.
+I use Mac and I see no issues running Blender 2.80 on the latest macOS Monterey 12.0.1.
+
+
+macOS - Blender 2.80:
+https://download.blender.org/release/Blender2.80/blender-2.80-macOS.dmg
+
+
+Linux 32 bit - Blender 2.80:
+https://download.blender.org/release/Blender2.80/blender-2.80-linux-glibc224-i686.tar.bz2
+
+
+Linux 64 bit - Blender 2.80:
+https://download.blender.org/release/Blender2.80/blender-2.80-linux-glibc217-x86_64.tar.bz2
+
+
+Windows 32 bit - Blender 2.80:
+https://download.blender.org/release/Blender2.80/blender-2.80-windows32.zip
+or
+https://download.blender.org/release/Blender2.80/blender-2.80-windows32.msi
+
+
+Windows 64 bit - Blender 2.80:
+https://download.blender.org/release/Blender2.80/blender-2.80-windows64.zip
+or
+https://download.blender.org/release/Blender2.80/blender-2.80-windows64.msi
+
+
+There are a number of other build variants there so check out the top link
+that goes to all of them if you need to.
+

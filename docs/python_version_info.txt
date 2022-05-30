@@ -1,11 +1,14 @@
 Blender.org is close to releasing a major new version of Blender: 2.80.
-This Boablend project is being developed on MacOS using the just-released
-MacOS build of Blender 2.80 Beta, released May 15, 2019. The internally-bundled
+This Boablend project is being developed on macOS using the just-released
+macOS build of Blender 2.80 Beta, released May 15, 2019. The internally-bundled
 Python environment in this version of Blender 2.80b (Mac) is version 3.7.0.
 
-The local Python on the current MacOS development machine is installed and
-maintained by Homebrew, which is the best package manager to use on Mac for
-Python and numerous other packages.
+The local Python on the current macOS development machine is installed and
+maintained by Homebrew.
+TODO: UPDATE: In progress changing entirely to using Pyenv and Pyenv-Virtualenv
+for management of Python installations/versions and also the Python virtual
+environment for this project. See the new init document or script in the
+project root for more info.
 
 Homebrew refers to python3 as just 'python' in terms of formulae names.
 The python3 binary is installed at:
@@ -16,6 +19,11 @@ to the Blender 2.80b (MacOS) bundled Python version of 3.7.0 so it is not
 considered necessary to make the local Homebrew Python match this and 3.7.3
 should be fine.
 
+TODO: UPDATE: All the above info about Homebrew Python is now irrelevant.
+Pyenv will allow much closer version matching and much better overall
+Python environment management. All docs will be re-written for this.
+Work is in progress.
+
 Note that in the initial stages of this project, it is only planned to use
 Blender's bundled Python and the Homebrew python3 will only be used by the
 VSCode IDE while coding. In the future however, steps may be taken to have
@@ -23,8 +31,15 @@ Blender use the external Homebrew python3 and this will likely come about when
 there is a need to install additional python modules. When that time comes,
 it is also planned to have Blender use a Python virtual environment.
 
-The best method of accomplishing the externalization of python and the usage
+The best method of accomplishing the externalization of Python and the usage
 of a virtual environment with Blender 2.80b remains to be worked out.
+TODO: UPDATE: Regarding above: The Pyenv aspect is worked out. There remain
+some Blender-specific challenges to executing outside of Blender which is
+what Boablend 'vipers' are all about. See /vipers/about_vipers.txt
+Vipers and external execution using the venv are all experimental and
+Blender's idiosyncrasies show up a bit more in this approach.
+The stable mode for using Boablend is by using Boas which are executed internally,
+within Blender's own built-in Python environment.
 
 ##
 #

@@ -25,7 +25,7 @@
 #
 
 # Vipers will almost always have a bash script for setup and launching and a python script which
-# contains the code which potentially imports boablend libraries and performes the automation of
+# contains the code which potentially imports boablend libraries and performs the automation of
 # Blender. Both of these paired files will have '_vp' at the end of the filename to indicate they
 # are paired viper scripts and to differentiate them from boas and other scripts within Boablend
 # which might in some cases have similar names. For example:
