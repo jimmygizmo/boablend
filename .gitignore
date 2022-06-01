@@ -5,6 +5,17 @@ out/
 out2/
 tmp/
 
+# TODO: Considering taking .vscode dir out of the repo. I want to look back at why
+# I chose to track it. I might have been doing it to manage fine tuning of settings
+# so it was mostly for visibility of changes caused via the GUI. It is valuable
+# to really fine tune your IDE and also to have a handle on the settings themselves.
+# Sometimes the best way to really fine tune your IDE is to manually edit settings.
+# Not doing that here yet but I am pretty sure now that is why I was tracking the
+# .vscode dir. Anyhow, lately I am mostly in PyCharm and WebStorm, but the same
+# logic applies so perhaps I will start tracking .idea settings more now. These comments
+# should be moved to a document about this topic to keep in my repos where I am doing
+# this.
+#
 # We DO track .vscode settings, but not the launch/run settings currently:
 .vscode/launch.json
 
